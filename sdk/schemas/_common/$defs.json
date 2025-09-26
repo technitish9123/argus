@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ank.dev/dsl/v1/$defs.json",
+  "$defs": {
+    "Address": {
+      "type": "string",
+      "pattern": "^0x[a-fA-F0-9]{40}$",
+      "description": "EVM address (20 bytes, checksummed not enforced)"
+    },
+    "BytesHexEven": {
+      "type": "string",
+      "pattern": "^0x([a-fA-F0-9]{2})*$",
+      "description": "0x‑prefixed even-length hex"
+    },
+    "Bytes32": {
+      "type": "string",
+      "pattern": "^0x([a-fA-F0-9]{2}){32}$",
+      "description": "32‑byte hex"
+    },
+    "Uint256Str": {
+      "type": "string",
+      "pattern": "^[0-9]+$",
+      "description": "Decimal string for uint256"
+    },
+    "ChainId": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "EVM chain id"
+    },
+    "Role": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]{1,63}$",
+      "description": "Role key resolvable via AddressRegistry"
+    },
+    "RoleOrAddress": {
+      "anyOf": [{ "$ref": "#/$defs/Address" }, { "$ref": "#/$defs/Role" }],
+      "description": "Either a raw address or a registry role"
+    },
+    "Deadline": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Unix timestamp (seconds)"
+    },
+    "Bps": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 10000,
+      "description": "Basis points (0-10000)"
+    }
+  }
+}

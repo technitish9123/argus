@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "morpho.supplyCollateral",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "protocol": { "const": "morpho" },
+    "contract": {
+      "anyOf": [
+        { "const": "morpho" },
+        { "type": "string", "pattern": "^0x[a-fA-F0-9]{40}$" }
+      ]
+    },
+    "method": { "const": "supplyCollateral" },
+    "params": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["market", "collateral", "assets", "onBehalf"],
+      "properties": {
+        "market": { "type": "string", "pattern": "^0x[a-fA-F0-9]{64}$" },
+        "collateral": { "type": "string", "pattern": "^0x[a-fA-F0-9]{40}$" },
+        "assets": { "type": "string", "pattern": "^[0-9]+$" },
+        "onBehalf": { "type": "string", "pattern": "^0x[a-fA-F0-9]{40}$" }
+      }
+    },
+    "chainId": { "type": "integer", "minimum": 1 },
+
+    "x-abi": {
+      "type": "string",
+      "const": "function supplyCollateral((address loanToken,address collateralToken,address oracle,address irm,uint256 lltv) marketParams,uint256 assets,address onBehalf,bytes data)"
+    },
+
+    "x-spenderRole": {
+      "type": "string",
+      "const": "morpho"
+    },
+    "x-debits": {
+      "x-hints": [{ "amountKey": "assets", "tokenParam": "collateral" }]
+    }
+  },
+  "required": ["protocol", "contract", "method", "params"]
+}

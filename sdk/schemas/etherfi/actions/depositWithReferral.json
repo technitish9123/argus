@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "etherfi.depositWithReferral",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "protocol": { "const": "etherfi" },
+    "contract": { "const": "liquidityPool" },
+    "method":   { "const": "deposit" },
+    "params": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["referrer"],
+      "properties": {
+        "referrer": { "type": "string", "pattern": "^0x[a-fA-F0-9]{40}$" }
+      }
+    },
+    "value":   { "type": "string", "pattern": "^[0-9]+$", "description": "wei to deposit" },
+    "chainId": { "type": "integer", "minimum": 1 },
+    "x-abi":   { "type": "string", "const": "function deposit(address referrer) payable returns (uint256)" }
+  },
+  "required": ["protocol","contract","method","params","value"]
+}

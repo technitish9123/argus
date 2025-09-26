@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "lido.unwrapWstETH",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "protocol": { "const": "lido" },
+    "contract": { "const": "wsteth" },
+    "method":   { "const": "unwrap" },
+    "params": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["wstETHAmount"],
+      "properties": { "wstETHAmount": { "type": "string", "pattern": "^[0-9]+$" } }
+    },
+    "chainId": { "type": "integer", "minimum": 1 },
+    "x-abi":   { "type": "string", "const": "function unwrap(uint256 wstETHAmount) returns (uint256)" }
+  },
+  "required": ["protocol","contract","method","params"]
+}

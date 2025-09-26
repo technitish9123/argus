@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "lido.wrapStETH",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "protocol": { "const": "lido" },
+    "contract": { "const": "wsteth" },
+    "method":   { "const": "wrap" },
+    "params": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["stETHAmount"],
+      "properties": {
+        "stETHAmount": { "type": "string", "pattern": "^[0-9]+$" }
+      }
+    },
+    "chainId": { "type": "integer", "minimum": 1 },
+    "x-abi": { "type": "string", "const": "function wrap(uint256 stETHAmount) returns (uint256)" },
+    "x-debitTokenRole": { "const": "steth" },
+    "x-debitAmountKey": { "const": "stETHAmount" }
+  },
+  "required": ["protocol","contract","method","params"]
+}

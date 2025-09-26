@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "ank://spec/dsl.schema.json",
+  "title": "DSL Execution Envelope",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "protocol": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+    "contract": { "$ref": "ank://schemas/_common/common.schema.json#/$defs/RoleOrAddress" },
+    "method":   { "type": "string", "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$" },
+    "params":   { "type": "object" },
+    "value":    { "$ref": "ank://schemas/_common/common.schema.json#/$defs/AmountWei" },
+    "chainId":  { "$ref": "ank://schemas/_common/common.schema.json#/$defs/ChainId" },
+    "x-hints":  {
+      "type": "object",
+      "description": "Optional execution hints",
+      "additionalProperties": true
+    }
+  },
+  "required": ["protocol", "contract", "method", "params", "chainId"]
+}

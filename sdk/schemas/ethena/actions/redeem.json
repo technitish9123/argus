@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ethena.redeemSUSDe",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "protocol": { "const": "ethena" },
+    "contract": { "const": "susde" },
+    "method": { "const": "redeem" },
+    "params": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["shares", "receiver", "owner"],
+      "properties": {
+        "shares": { "type": "string", "pattern": "^[0-9]+$" },
+        "receiver": { "type": "string", "pattern": "^0x[a-fA-F0-9]{40}$" },
+        "owner": { "type": "string", "pattern": "^0x[a-fA-F0-9]{40}$" }
+      }
+    },
+    "chainId": { "type": "integer", "minimum": 1 },
+
+    "x-abi": {
+      "type": "string",
+      "const": "function redeem(uint256 shares,address receiver,address owner) returns (uint256 assets)"
+    }
+  },
+  "required": ["protocol", "contract", "method", "params"]
+}

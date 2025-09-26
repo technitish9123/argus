@@ -1,0 +1,6 @@
+{
+  "protocol": "erc20",
+  "version": "v1",
+  "description": "Generic ERC-20 interactions",
+  "standardAbi": "IERC20"
+}

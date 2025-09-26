@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "uniswap_v3.exactOutput",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "protocol": { "const": "uniswap_v3" },
+    "contract": {
+      "anyOf": [
+        { "const": "router" },
+        { "type": "string", "pattern": "^0x[a-fA-F0-9]{40}$" }
+      ]
+    },
+    "method": { "const": "exactOutput" },
+    "params": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "recipient",
+        "deadline",
+        "amountOut",
+        "amountInMaximum"
+      ],
+      "properties": {
+        "path": { "type": "string", "pattern": "^0x[a-fA-F0-9]+$" },
+        "recipient": { "type": "string", "pattern": "^0x[a-fA-F0-9]{40}$" },
+        "deadline": { "type": "integer", "minimum": 0 },
+        "amountOut": { "type": "string", "pattern": "^[0-9]+$" },
+        "amountInMaximum": { "type": "string", "pattern": "^[0-9]+$" },
+
+        "tokenIn": { "type": "string", "pattern": "^0x[a-fA-F0-9]{40}$" }
+      }
+    },
+    "chainId": { "type": "integer", "minimum": 1 },
+    "x-abi": {
+      "type": "string",
+      "const": "exactOutput((bytes path,address recipient,uint256 deadline,uint256 amountOut,uint256 amountInMaximum))"
+    },
+    "x-spenderRole": { "const": "router" },
+    "x-debits": {
+      "description": "Approval/debit hints for the SDK",
+      "x-hints": [{ "amountKey": "amountInMaximum", "tokenParam": "tokenIn" }]
+    }
+  },
+  "required": ["protocol", "contract", "method", "params"]
+}

@@ -1,0 +1,540 @@
+{
+  "strategies": [
+    {
+      "id": "ee84f827-0e95-4f94-9a2b-497f559db5ef",
+      "name": "leverage-loop",
+      "description": "Leverage loop example",
+      "scriptPath": "examples/leverage_loop.ts",
+      "metadata": {
+        "risk": "high"
+      },
+      "params": {
+        "leverage": 3,
+        "iterations": 3
+      },
+      "createdAt": 1758884850120,
+      "updatedAt": 1758884850120
+    },
+    {
+      "id": "7bd75c3c-abb4-49dc-b35a-a4f772ef3ff1",
+      "name": "trading agent",
+      "description": "Ensemble trend/MR with ATR risk sizing",
+      "scriptPath": "examples/trading_agent.ts",
+      "metadata": {
+        "risk": "medium"
+      },
+      "params": {
+        "symbol": "ETH-USD",
+        "equity": 100000,
+        "fast": 20,
+        "slow": 50,
+        "rsiLen": 14,
+        "rsiOB": 70,
+        "rsiOS": 30,
+        "useMeanRev": true,
+        "meanRevLen": 20,
+        "meanRevZ": 1.5,
+        "riskPct": 0.01,
+        "atrLen": 14,
+        "atrMult": 2,
+        "lots": 1,
+        "maxLeverage": 5
+      },
+      "createdAt": 1758904190042,
+      "updatedAt": 1758904190042
+    },
+    {
+      "id": "a1b2c3d4-0000-0000-0000-000000000001",
+      "name": "agent-demo",
+      "description": "Agent demo example",
+      "scriptPath": "examples/agent_demo.ts",
+      "metadata": {
+        "risk": "high"
+      },
+      "createdAt": 1758884850121,
+      "updatedAt": 1758884850121
+    },
+    {
+      "id": "a1b2c3d4-0000-0000-0000-000000000002",
+      "name": "crosschain-swap",
+      "description": "Crosschain swap example",
+      "scriptPath": "examples/crosschain_swap.ts",
+      "metadata": {
+        "risk": "high"
+      },
+      "createdAt": 1758884850122,
+      "updatedAt": 1758884850122
+    },
+    {
+      "id": "a1b2c3d4-0000-0000-0000-000000000003",
+      "name": "debug-encode",
+      "description": "Debug encode helper",
+      "scriptPath": "examples/debug_encode.ts",
+      "metadata": {
+        "risk": "high"
+      },
+      "createdAt": 1758884850123,
+      "updatedAt": 1758884850123
+    },
+    {
+      "id": "a1b2c3d4-0000-0000-0000-000000000004",
+      "name": "intent",
+      "description": "Intent example",
+      "scriptPath": "examples/intent.ts",
+      "metadata": {
+        "risk": "high"
+      },
+      "createdAt": 1758884850124,
+      "updatedAt": 1758884850124
+    },
+    {
+      "id": "a1b2c3d4-0000-0000-0000-000000000005",
+      "name": "lido-aave",
+      "description": "Lido + Aave example",
+      "scriptPath": "examples/lido-aave.ts",
+      "metadata": {
+        "risk": "high"
+      },
+      "createdAt": 1758884850125,
+      "updatedAt": 1758884850125
+    },
+    {
+      "id": "a1b2c3d4-0000-0000-0000-000000000006",
+      "name": "lido-stake-llm",
+      "description": "Lido stake with LLM",
+      "scriptPath": "examples/lido-stake-llm.ts",
+      "metadata": {
+        "risk": "high"
+      },
+      "createdAt": 1758884850126,
+      "updatedAt": 1758884850126
+    },
+    {
+      "id": "a1b2c3d4-0000-0000-0000-000000000007",
+      "name": "lido-stake",
+      "description": "Lido stake example",
+      "scriptPath": "examples/lido-stake.ts",
+      "metadata": {
+        "risk": "high"
+      },
+      "createdAt": 1758884850127,
+      "updatedAt": 1758884850127
+    },
+    {
+      "id": "a1b2c3d4-0000-0000-0000-000000000008",
+      "name": "lido-stake2",
+      "description": "Lido stake variant",
+      "scriptPath": "examples/lido-stake2.ts",
+      "metadata": {
+        "risk": "high"
+      },
+      "createdAt": 1758884850128,
+      "updatedAt": 1758884850128
+    },
+    {
+      "id": "a1b2c3d4-0000-0000-0000-000000000009",
+      "name": "ollama-llm",
+      "description": "Ollama LLM example",
+      "scriptPath": "examples/ollamaLLM.ts",
+      "metadata": {
+        "risk": "high"
+      },
+      "createdAt": 1758884850129,
+      "updatedAt": 1758884850129
+    },
+    {
+      "id": "a1b2c3d4-0000-0000-0000-000000000010",
+      "name": "pyusd-payment",
+      "description": "PYUSD payment example",
+      "scriptPath": "examples/pyusd_payment.ts",
+      "metadata": {
+        "risk": "high"
+      },
+      "createdAt": 1758884850130,
+      "updatedAt": 1758884850130
+    },
+    {
+      "id": "a1b2c3d4-0000-0000-0000-000000000011",
+      "name": "registry",
+      "description": "Registry example",
+      "scriptPath": "examples/registry.ts",
+      "metadata": {
+        "risk": "high"
+      },
+      "createdAt": 1758884850131,
+      "updatedAt": 1758884850131
+    },
+    {
+      "id": "a1b2c3d4-0000-0000-0000-000000000012",
+      "name": "send",
+      "description": "Send example",
+      "scriptPath": "examples/send.ts",
+      "metadata": {
+        "risk": "high"
+      },
+      "createdAt": 1758884850132,
+      "updatedAt": 1758884850132
+    },
+    {
+      "id": "a1b2c3d4-0000-0000-0000-000000000013",
+      "name": "uniswap-single-swap",
+      "description": "Uniswap single swap example",
+      "scriptPath": "examples/uniswap_single_swap.ts",
+      "metadata": {
+        "risk": "high"
+      },
+      "createdAt": 1758884850133,
+      "updatedAt": 1758884850133
+    }
+  ],
+  "runs": [
+    {
+      "id": "0fe644cc-8837-4d65-ad01-ef71c1277c9f",
+      "strategyId": "7bd75c3c-abb4-49dc-b35a-a4f772ef3ff1",
+      "params": {},
+      "status": "exited",
+      "startedAt": 1758906097829,
+      "logs": [],
+      "finishedAt": 1758906098999
+    },
+    {
+      "id": "04f3d5e5-d198-4fd6-ac17-f619fe6300dc",
+      "strategyId": "7bd75c3c-abb4-49dc-b35a-a4f772ef3ff1",
+      "params": {},
+      "status": "exited",
+      "startedAt": 1758906102236,
+      "logs": [],
+      "finishedAt": 1758906102706
+    },
+    {
+      "id": "353cdac9-4335-4037-80fb-5a899e1f876b",
+      "strategyId": "7bd75c3c-abb4-49dc-b35a-a4f772ef3ff1",
+      "params": {},
+      "status": "exited",
+      "startedAt": 1758906109691,
+      "logs": [],
+      "finishedAt": 1758906110167
+    },
+    {
+      "id": "79414637-39ac-4d92-8206-c4daf7bc06ee",
+      "strategyId": "7bd75c3c-abb4-49dc-b35a-a4f772ef3ff1",
+      "params": {},
+      "status": "exited",
+      "startedAt": 1758906162730,
+      "logs": [],
+      "finishedAt": 1758906163204
+    },
+    {
+      "id": "dd21e567-7566-41fb-a401-3547c5601ebd",
+      "strategyId": "7bd75c3c-abb4-49dc-b35a-a4f772ef3ff1",
+      "params": {},
+      "status": "exited",
+      "startedAt": 1758906173109,
+      "logs": [],
+      "finishedAt": 1758906173584
+    },
+    {
+      "id": "81bb4034-d90c-4e03-908c-96ed2b276af2",
+      "strategyId": "7bd75c3c-abb4-49dc-b35a-a4f772ef3ff1",
+      "params": {},
+      "status": "exited",
+      "startedAt": 1758909195378,
+      "logs": [],
+      "finishedAt": 1758909196005
+    },
+    {
+      "id": "501a3643-a32c-4cc2-b89a-eb35e761a758",
+      "strategyId": "7bd75c3c-abb4-49dc-b35a-a4f772ef3ff1",
+      "params": {},
+      "status": "exited",
+      "startedAt": 1758909269264,
+      "logs": [],
+      "finishedAt": 1758909269880
+    },
+    {
+      "id": "d52e9b25-7782-4520-b00c-1451b1620f59",
+      "strategyId": "7bd75c3c-abb4-49dc-b35a-a4f772ef3ff1",
+      "params": {},
+      "status": "exited",
+      "startedAt": 1758910192920,
+      "logs": [],
+      "finishedAt": 1758910193575
+    },
+    {
+      "id": "f9f10a41-3180-4bba-835f-728f2e04d050",
+      "strategyId": "7bd75c3c-abb4-49dc-b35a-a4f772ef3ff1",
+      "params": {},
+      "status": "exited",
+      "startedAt": 1758910194487,
+      "logs": [],
+      "finishedAt": 1758910194967
+    },
+    {
+      "id": "661f9260-f26e-455b-b486-7ee8f91eb59a",
+      "strategyId": "7bd75c3c-abb4-49dc-b35a-a4f772ef3ff1",
+      "params": {},
+      "status": "exited",
+      "startedAt": 1758910224570,
+      "logs": [],
+      "finishedAt": 1758910225167
+    },
+    {
+      "id": "8d366c3c-d54b-4cf2-94a7-0d5a004be53e",
+      "strategyId": "7bd75c3c-abb4-49dc-b35a-a4f772ef3ff1",
+      "params": {},
+      "status": "exited",
+      "startedAt": 1758910225810,
+      "logs": [],
+      "finishedAt": 1758910226278
+    },
+    {
+      "id": "bbaec321-ccb2-429c-84b8-30bd569468df",
+      "strategyId": "7bd75c3c-abb4-49dc-b35a-a4f772ef3ff1",
+      "params": {},
+      "status": "error",
+      "startedAt": 1758910294718,
+      "logs": [
+        "node:fs:442\n    return binding.readFileUtf8(path, stringToFlags(options.flag));\n                   ^\n\nError: ENOENT: no such file or directory, open '/Users/nitish/Desktop/agent-protocol-dsl/backend/eth_consolidated.csv'\n    at Object.readFileSync (node:fs:442:20)\n    at loadCSV (/Users/nitish/Desktop/agent-protocol-dsl/utils/load.ts:15:20)\n    at <anonymous> (/Users/nitish/Desktop/agent-protocol-dsl/examples/trading_agent.ts:322:20)\n    at ModuleJob.run (node:internal/modules/esm/module_job:274:25)\n    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {\n  errno: -2,\n  code: 'ENOENT',\n  syscall: 'open',\n  path: '/Users/nitish/Desktop/agent-protocol-dsl/backend/eth_consolidated.csv'\n}\n\nNode.js v22.16.0\n"
+      ],
+      "finishedAt": 1758910295397
+    },
+    {
+      "id": "a2757e4d-9b34-44f9-8f23-1cdefecaaf76",
+      "strategyId": "ee84f827-0e95-4f94-9a2b-497f559db5ef",
+      "params": {},
+      "status": "error",
+      "startedAt": 1758910323862,
+      "logs": [
+        "JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)\n",
+        "Error: connect ECONNREFUSED 127.0.0.1:8545\n    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1636:16) {\n  errno: -61,\n  code: 'ECONNREFUSED',\n  syscall: 'connect',\n  address: '127.0.0.1',\n  port: 8545\n}\n"
+      ],
+      "finishedAt": 1758910324649
+    },
+    {
+      "id": "265e7bb1-507a-44bd-8382-caa039070add",
+      "strategyId": "ee84f827-0e95-4f94-9a2b-497f559db5ef",
+      "params": {},
+      "status": "error",
+      "startedAt": 1758910443133,
+      "logs": [
+        "\n== Initial supply ==\n",
+        "→ approving WETH to 0x87870Bca3F3fD6335C3F4ce8392D69350B4fA4E2 for at least 0.1 WETH...\n",
+        "balances before supply — WETH: 0.0, USDC: 0.0\n",
+        "preview aave supply calldata (len): 266 0x617ba037000000000000000000000000c02aaa39b223fe8d0a0e5c4f27ead9083c756cc2000000000000000000000000000000000000000000000000016345785d8a0000000000000000000000000000f39fd6e51aad88f6f4ce6ab8827279cfffb922\n",
+        "Error: execution reverted (no data present; likely require(false) occurred (action=\"estimateGas\", data=\"0x\", reason=\"require(false)\", transaction={ \"data\": \"0x617ba037000000000000000000000000c02aaa39b223fe8d0a0e5c4f27ead9083c756cc2000000000000000000000000000000000000000000000000016345785d8a0000000000000000000000000000f39fd6e51aad88f6f4ce6ab8827279cfffb922660000000000000000000000000000000000000000000000000000000000000000\", \"from\": \"0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266\", \"to\": \"0x87870Bca3F3fD6335C3F4ce8392D69350B4fA4E2\" }, invocation=null, revert=null, code=CALL_EXCEPTION, version=6.15.0)\n    at makeError (/Users/nitish/Desktop/agent-protocol-dsl/node_modules/.pnpm/ethers@6.15.0/node_modules/ethers/src.ts/utils/errors.ts:698:21)\n    at getBuiltinCallException (/Users/nitish/Desktop/agent-protocol-dsl/node_modules/.pnpm/ethers@6.15.0/node_modules/ethers/src.ts/abi/abi-coder.ts:118:12)\n    at Function.getBuiltinCallException (/Users/nitish/Desktop/agent-protocol-dsl/node_modules/.pnpm/ethers@6.15.0/node_modules/ethers/src.ts/abi/abi-coder.ts:235:16)\n    at JsonRpcProvider.getRpcError (/Users/nitish/Desktop/agent-protocol-dsl/node_modules/.pnpm/ethers@6.15.0/node_modules/ethers/src.ts/providers/provider-jsonrpc.ts:1016:32)\n    at <anonymous> (/Users/nitish/Desktop/agent-protocol-dsl/node_modules/.pnpm/ethers@6.15.0/node_modules/ethers/src.ts/providers/provider-jsonrpc.ts:571:45)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5) {\n  code: 'CALL_EXCEPTION',\n  action: 'estimateGas',\n  data: '0x',\n  reason: 'require(false)',\n  transaction: {\n    to: '0x87870Bca3F3fD6335C3F4ce8392D69350B4fA4E2',\n    data: '0x617ba037000000000000000000000000c02aaa39b223fe8d0a0e5c4f27ead9083c756cc2000000000000000000000000000000000000000000000000016345785d8a0000000000000000000000000000f39fd6e51aad88f6f4ce6ab8827279cfffb922660000000000000000000000000000000000000000000000000000000000000000',\n    from: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'\n  },\n  invocation: null,\n  revert: null,\n  shortMessage: 'execution reverted (no data present; likely require(false) occurred',\n  info: {\n    error: { code: 3, message: 'execution reverted', data: '0x' },\n    payload: {\n      method: 'eth_estimateGas',\n      params: [Array],\n      id: 5,\n      jsonrpc: '2.0'\n    }\n  }\n}\n"
+      ],
+      "finishedAt": 1758910455515
+    },
+    {
+      "id": "80342470-d603-4ead-b727-a943d4f9b332",
+      "strategyId": "ee84f827-0e95-4f94-9a2b-497f559db5ef",
+      "params": {},
+      "status": "error",
+      "startedAt": 1758910471333,
+      "logs": [
+        "\n== Initial supply ==\n",
+        "balances before supply — WETH: 0.0, USDC: 0.0\n",
+        "preview aave supply calldata (len): 266 0x617ba037000000000000000000000000c02aaa39b223fe8d0a0e5c4f27ead9083c756cc2000000000000000000000000000000000000000000000000016345785d8a0000000000000000000000000000f39fd6e51aad88f6f4ce6ab8827279cfffb922\n",
+        "Error: execution reverted (no data present; likely require(false) occurred (action=\"estimateGas\", data=\"0x\", reason=\"require(false)\", transaction={ \"data\": \"0x617ba037000000000000000000000000c02aaa39b223fe8d0a0e5c4f27ead9083c756cc2000000000000000000000000000000000000000000000000016345785d8a0000000000000000000000000000f39fd6e51aad88f6f4ce6ab8827279cfffb922660000000000000000000000000000000000000000000000000000000000000000\", \"from\": \"0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266\", \"to\": \"0x87870Bca3F3fD6335C3F4ce8392D69350B4fA4E2\" }, invocation=null, revert=null, code=CALL_EXCEPTION, version=6.15.0)\n    at makeError (/Users/nitish/Desktop/agent-protocol-dsl/node_modules/.pnpm/ethers@6.15.0/node_modules/ethers/src.ts/utils/errors.ts:698:21)\n    at getBuiltinCallException (/Users/nitish/Desktop/agent-protocol-dsl/node_modules/.pnpm/ethers@6.15.0/node_modules/ethers/src.ts/abi/abi-coder.ts:118:12)\n    at Function.getBuiltinCallException (/Users/nitish/Desktop/agent-protocol-dsl/node_modules/.pnpm/ethers@6.15.0/node_modules/ethers/src.ts/abi/abi-coder.ts:235:16)\n    at JsonRpcProvider.getRpcError (/Users/nitish/Desktop/agent-protocol-dsl/node_modules/.pnpm/ethers@6.15.0/node_modules/ethers/src.ts/providers/provider-jsonrpc.ts:1016:32)\n    at <anonymous> (/Users/nitish/Desktop/agent-protocol-dsl/node_modules/.pnpm/ethers@6.15.0/node_modules/ethers/src.ts/providers/provider-jsonrpc.ts:571:45)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5) {\n  code: 'CALL_EXCEPTION',\n  action: 'estimateGas',\n  data: '0x',\n  reason: 'require(false)',\n  transaction: {\n    to: '0x87870Bca3F3fD6335C3F4ce8392D69350B4fA4E2',\n    data: '0x617ba037000000000000000000000000c02aaa39b223fe8d0a0e5c4f27ead9083c756cc2000000000000000000000000000000000000000000000000016345785d8a0000000000000000000000000000f39fd6e51aad88f6f4ce6ab8827279cfffb922660000000000000000000000000000000000000000000000000000000000000000',\n    from: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'\n  },\n  invocation: null,\n  revert: null,\n  shortMessage: 'execution reverted (no data present; likely require(false) occurred',\n  info: {\n    error: { code: 3, message: 'execution reverted', data: '0x' },\n    payload: {\n      method: 'eth_estimateGas',\n      params: [Array],\n      id: 5,\n      jsonrpc: '2.0'\n    }\n  }\n}\n"
+      ],
+      "finishedAt": 1758910472006
+    },
+    {
+      "id": "7ea4d559-c1e6-4d38-abf6-ecb6d6e9a831",
+      "strategyId": "7bd75c3c-abb4-49dc-b35a-a4f772ef3ff1",
+      "params": {},
+      "status": "error",
+      "startedAt": 1758910484216,
+      "logs": [
+        "node:fs:442\n    return binding.readFileUtf8(path, stringToFlags(options.flag));\n                   ^\n\nError: ENOENT: no such file or directory, open '/Users/nitish/Desktop/agent-protocol-dsl/backend/eth_consolidated.csv'\n    at Object.readFileSync (node:fs:442:20)\n    at loadCSV (/Users/nitish/Desktop/agent-protocol-dsl/utils/load.ts:15:20)\n    at <anonymous> (/Users/nitish/Desktop/agent-protocol-dsl/examples/trading_agent.ts:391:20)\n    at ModuleJob.run (node:internal/modules/esm/module_job:274:25)\n    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {\n  errno: -2,\n  code: 'ENOENT',\n  syscall: 'open',\n  path: '/Users/nitish/Desktop/agent-protocol-dsl/backend/eth_consolidated.csv'\n}\n\nNode.js v22.16.0\n"
+      ],
+      "finishedAt": 1758910484865
+    },
+    {
+      "id": "4cf243b4-44ae-4b4b-880f-597d3e06aecf",
+      "strategyId": "7bd75c3c-abb4-49dc-b35a-a4f772ef3ff1",
+      "params": {},
+      "status": "error",
+      "startedAt": 1758910540176,
+      "logs": [
+        "[ERROR] Could not find eth_consolidated.csv in project root or backend/data.\n",
+        "Please place a valid OHLCV CSV at eth_consolidated.csv or backend/data/eth_consolidated.csv.\n"
+      ],
+      "finishedAt": 1758910540951
+    },
+    {
+      "id": "4f847c7a-7d3c-48c2-aa9a-aa0f5e3cb88f",
+      "strategyId": "7bd75c3c-abb4-49dc-b35a-a4f772ef3ff1",
+      "params": {},
+      "status": "error",
+      "startedAt": 1758910563796,
+      "logs": [
+        "[ERROR] Could not find eth_consolidated.csv in project root or backend/data.\n",
+        "Please place a valid OHLCV CSV at eth_consolidated.csv or backend/data/eth_consolidated.csv.\n"
+      ],
+      "finishedAt": 1758910564515
+    },
+    {
+      "id": "c74174ee-0e11-4dd1-a17d-7bb5e0718ca7",
+      "strategyId": "7bd75c3c-abb4-49dc-b35a-a4f772ef3ff1",
+      "params": {},
+      "status": "error",
+      "startedAt": 1758910630960,
+      "logs": [
+        "[ERROR] Could not find eth_consolidated.csv in project root or backend/data.\n",
+        "Please place a valid OHLCV CSV at eth_consolidated.csv or backend/data/eth_consolidated.csv.\n"
+      ],
+      "finishedAt": 1758910631685
+    },
+    {
+      "id": "76e519e1-b069-4a01-af85-cacfca6c01ee",
+      "strategyId": "7bd75c3c-abb4-49dc-b35a-a4f772ef3ff1",
+      "params": {},
+      "status": "error",
+      "startedAt": 1758911055857,
+      "logs": [
+        "/Users/nitish/Desktop/agent-protocol-dsl/examples/trading_agent.ts:393\nconst rootDir = path.resolve(__dirname, '..');\n                             ^\n\n\nReferenceError: __dirname is not defined in ES module scope\n    at <anonymous> (/Users/nitish/Desktop/agent-protocol-dsl/examples/trading_agent.ts:393:30)\n    at ModuleJob.run (node:internal/modules/esm/module_job:274:25)\n    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)\n\nNode.js v22.16.0\n"
+      ],
+      "finishedAt": 1758911056655
+    },
+    {
+      "id": "46c90ead-fbc4-4364-8e80-d4385909a714",
+      "strategyId": "7bd75c3c-abb4-49dc-b35a-a4f772ef3ff1",
+      "params": {},
+      "status": "exited",
+      "startedAt": 1758911098271,
+      "logs": [
+        "[Agent] Signal: SHORT (-1) | Confidence: 0.33\n",
+        "[Agent] Selling 130 ETH for ~$570937.90 USDC on Uniswap v3\n[Agent] TX: paper-1758911099267 confirmed\n[Agent] Stop-loss set @ $3952.65 | Take-profit @ $5270.20\n{\n  executed: true,\n  intent: {\n    type: 'order',\n    symbol: 'ETH-USD',\n    side: 'sell',\n    deltaUnits: -130,\n    reason: 'Go SHORT (fast<20 / slow<50, RSI filter OK)',\n    ts: 1758911099267,\n    price: 4391.83,\n    context: { signal: -1, targetUnits: -130, currentUnits: 0 }\n  }\n}\n"
+      ],
+      "finishedAt": 1758911099284
+    },
+    {
+      "id": "c50ac596-dbaa-43c4-8b19-65007e73af5d",
+      "strategyId": "7bd75c3c-abb4-49dc-b35a-a4f772ef3ff1",
+      "params": {},
+      "status": "error",
+      "startedAt": 1758911520684,
+      "logs": [
+        "[Agent] Signal: SHORT (-1) | Confidence: 0.33\n",
+        "[Agent] Selling 130 ETH for ~$570937.90 USDC on Uniswap v3\n[OnchainBroker] Preparing on-chain order for ETH-USD: unitsDelta=-130 price=4391.83\n[OnchainBroker] executing schema=file:///Users/nitish/Desktop/agent-protocol-dsl/schemas/uniswap_v3/actions/exactInputSingle.json inputs={\"contract\":\"0xE592427A0AEce92De3Edee1F18E0157C05861564\",\"tokenIn\":\"0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2\",\"tokenOut\":\"0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48\",\"fee\":3000,\"recipient\":\"0xd238ff944bacb478cbed5efcae784d7bf4f2ff80\",\"deadline\":1758912721,\"amountIn\":\"130000000000000000000\",\"amountOutMinimum\":\"0\",\"sqrtPriceLimitX96\":\"0\"}\n",
+        "[OnchainBroker] error executing on-chain order: Error: Validation failed: (root) must have required property 'protocol', (root) must have required property 'method', (root) must have required property 'params', (root) must have required property 'chainId', (root) must NOT have additional properties, (root) must NOT have additional properties, (root) must NOT have additional properties, (root) must NOT have additional properties, (root) must NOT have additional properties, (root) must NOT have additional properties, (root) must NOT have additional properties, (root) must NOT have additional properties\n    at runAgentAction (/Users/nitish/Desktop/agent-protocol-dsl/src/exec/agent.ts:21:11)\n    at OnchainBroker.placeMarketOrder (/Users/nitish/Desktop/agent-protocol-dsl/examples/trading_agent.ts:367:34)\n    at run (/Users/nitish/Desktop/agent-protocol-dsl/examples/trading_agent.ts:224:34)\n    at async <anonymous> (/Users/nitish/Desktop/agent-protocol-dsl/examples/trading_agent.ts:446:13)\n",
+        "node:internal/modules/run_main:123\n    triggerUncaughtException(\n    ^\n\nError: Validation failed: (root) must have required property 'protocol', (root) must have required property 'method', (root) must have required property 'params', (root) must have required property 'chainId', (root) must NOT have additional properties, (root) must NOT have additional properties, (root) must NOT have additional properties, (root) must NOT have additional properties, (root) must NOT have additional properties, (root) must NOT have additional properties, (root) must NOT have additional properties, (root) must NOT have additional properties\n    at runAgentAction (/Users/nitish/Desktop/agent-protocol-dsl/src/exec/agent.ts:21:11)\n    at OnchainBroker.placeMarketOrder (/Users/nitish/Desktop/agent-protocol-dsl/examples/trading_agent.ts:367:34)\n    at run (/Users/nitish/Desktop/agent-protocol-dsl/examples/trading_agent.ts:224:34)\n    at async <anonymous> (/Users/nitish/Desktop/agent-protocol-dsl/examples/trading_agent.ts:446:13)\n\nNode.js v22.16.0\n"
+      ],
+      "finishedAt": 1758911521663
+    },
+    {
+      "id": "eed012b6-570f-4711-8c06-77230e6d6be1",
+      "strategyId": "7bd75c3c-abb4-49dc-b35a-a4f772ef3ff1",
+      "params": {},
+      "status": "error",
+      "startedAt": 1758911563017,
+      "logs": [
+        "[Agent] Signal: SHORT (-1) | Confidence: 0.33\n",
+        "[Agent] Selling 130 ETH for ~$570937.90 USDC on Uniswap v3\n[OnchainBroker] Preparing on-chain order for ETH-USD: unitsDelta=-130 price=4391.83\n[OnchainBroker] executing schema=file:///Users/nitish/Desktop/agent-protocol-dsl/schemas/uniswap_v3/actions/exactInputSingle.json inputs={\"contract\":\"0xE592427A0AEce92De3Edee1F18E0157C05861564\",\"tokenIn\":\"0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2\",\"tokenOut\":\"0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48\",\"fee\":3000,\"recipient\":\"0xd238ff944bacb478cbed5efcae784d7bf4f2ff80\",\"deadline\":1758912763,\"amountIn\":\"130000000000000000000\",\"amountOutMinimum\":\"0\",\"sqrtPriceLimitX96\":\"0\"}\n",
+        "[OnchainBroker] error executing on-chain order: Error: Validation failed: (root) must have required property 'protocol', (root) must have required property 'method', (root) must have required property 'params', (root) must have required property 'chainId', (root) must NOT have additional properties, (root) must NOT have additional properties, (root) must NOT have additional properties, (root) must NOT have additional properties, (root) must NOT have additional properties, (root) must NOT have additional properties, (root) must NOT have additional properties, (root) must NOT have additional properties\n    at runAgentAction (/Users/nitish/Desktop/agent-protocol-dsl/src/exec/agent.ts:21:11)\n    at OnchainBroker.placeMarketOrder (/Users/nitish/Desktop/agent-protocol-dsl/examples/trading_agent.ts:367:34)\n    at run (/Users/nitish/Desktop/agent-protocol-dsl/examples/trading_agent.ts:224:34)\n    at async <anonymous> (/Users/nitish/Desktop/agent-protocol-dsl/examples/trading_agent.ts:446:13)\n",
+        "node:internal/modules/run_main:123\n    triggerUncaughtException(\n    ^\n\nError: Validation failed: (root) must have required property 'protocol', (root) must have required property 'method', (root) must have required property 'params', (root) must have required property 'chainId', (root) must NOT have additional properties, (root) must NOT have additional properties, (root) must NOT have additional properties, (root) must NOT have additional properties, (root) must NOT have additional properties, (root) must NOT have additional properties, (root) must NOT have additional properties, (root) must NOT have additional properties\n    at runAgentAction (/Users/nitish/Desktop/agent-protocol-dsl/src/exec/agent.ts:21:11)\n    at OnchainBroker.placeMarketOrder (/Users/nitish/Desktop/agent-protocol-dsl/examples/trading_agent.ts:367:34)\n    at run (/Users/nitish/Desktop/agent-protocol-dsl/examples/trading_agent.ts:224:34)\n    at async <anonymous> (/Users/nitish/Desktop/agent-protocol-dsl/examples/trading_agent.ts:446:13)\n\nNode.js v22.16.0\n"
+      ],
+      "finishedAt": 1758911563991
+    },
+    {
+      "id": "562b96f7-5aae-4d50-bea9-4bd689ccdabd",
+      "strategyId": "7bd75c3c-abb4-49dc-b35a-a4f772ef3ff1",
+      "params": {},
+      "status": "error",
+      "startedAt": 1758911642853,
+      "logs": [
+        "[Agent] Signal: SHORT (-1) | Confidence: 0.33\n",
+        "[Agent] Selling 130 ETH for ~$570937.90 USDC on Uniswap v3\n[OnchainBroker] Preparing on-chain order for ETH-USD: unitsDelta=-130 price=4391.83\n[OnchainBroker] executing schema=file:///Users/nitish/Desktop/agent-protocol-dsl/schemas/uniswap_v3/actions/exactInputSingle.json inputs={\"protocol\":\"uniswap_v3\",\"method\":\"exactInputSingle\",\"params\":{\"contract\":\"0xE592427A0AEce92De3Edee1F18E0157C05861564\",\"tokenIn\":\"0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2\",\"tokenOut\":\"0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48\",\"fee\":3000,\"recipient\":\"0xd238ff944bacb478cbed5efcae784d7bf4f2ff80\",\"deadline\":1758912843,\"amountIn\":\"130000000000000000000\",\"amountOutMinimum\":\"0\",\"sqrtPriceLimitX96\":\"0\"},\"chainId\":1}\n",
+        "[OnchainBroker] error executing on-chain order: Error: Validation failed: (root) must have required property 'contract'\n    at runAgentAction (/Users/nitish/Desktop/agent-protocol-dsl/src/exec/agent.ts:21:11)\n    at OnchainBroker.placeMarketOrder (/Users/nitish/Desktop/agent-protocol-dsl/examples/trading_agent.ts:367:34)\n    at run (/Users/nitish/Desktop/agent-protocol-dsl/examples/trading_agent.ts:224:34)\n    at async <anonymous> (/Users/nitish/Desktop/agent-protocol-dsl/examples/trading_agent.ts:451:13)\n",
+        "node:internal/modules/run_main:123\n    triggerUncaughtException(\n    ^\n\nError: Validation failed: (root) must have required property 'contract'\n    at runAgentAction (/Users/nitish/Desktop/agent-protocol-dsl/src/exec/agent.ts:21:11)\n    at OnchainBroker.placeMarketOrder (/Users/nitish/Desktop/agent-protocol-dsl/examples/trading_agent.ts:367:34)\n    at run (/Users/nitish/Desktop/agent-protocol-dsl/examples/trading_agent.ts:224:34)\n    at async <anonymous> (/Users/nitish/Desktop/agent-protocol-dsl/examples/trading_agent.ts:451:13)\n\nNode.js v22.16.0\n"
+      ],
+      "finishedAt": 1758911643831
+    },
+    {
+      "id": "a39a7e01-5e5a-447d-aeb0-3619293ef59d",
+      "strategyId": "ee84f827-0e95-4f94-9a2b-497f559db5ef",
+      "params": {},
+      "status": "error",
+      "startedAt": 1758911660731,
+      "logs": [
+        "\n== Initial supply ==\n",
+        "balances before supply — WETH: 0.0, USDC: 0.0\n",
+        "preview aave supply calldata (len): 266 0x617ba037000000000000000000000000c02aaa39b223fe8d0a0e5c4f27ead9083c756cc2000000000000000000000000000000000000000000000000016345785d8a0000000000000000000000000000f39fd6e51aad88f6f4ce6ab8827279cfffb922\n",
+        "Error: execution reverted (no data present; likely require(false) occurred (action=\"estimateGas\", data=\"0x\", reason=\"require(false)\", transaction={ \"data\": \"0x617ba037000000000000000000000000c02aaa39b223fe8d0a0e5c4f27ead9083c756cc2000000000000000000000000000000000000000000000000016345785d8a0000000000000000000000000000f39fd6e51aad88f6f4ce6ab8827279cfffb922660000000000000000000000000000000000000000000000000000000000000000\", \"from\": \"0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266\", \"to\": \"0x87870Bca3F3fD6335C3F4ce8392D69350B4fA4E2\" }, invocation=null, revert=null, code=CALL_EXCEPTION, version=6.15.0)\n    at makeError (/Users/nitish/Desktop/agent-protocol-dsl/node_modules/.pnpm/ethers@6.15.0/node_modules/ethers/src.ts/utils/errors.ts:698:21)\n    at getBuiltinCallException (/Users/nitish/Desktop/agent-protocol-dsl/node_modules/.pnpm/ethers@6.15.0/node_modules/ethers/src.ts/abi/abi-coder.ts:118:12)\n    at Function.getBuiltinCallException (/Users/nitish/Desktop/agent-protocol-dsl/node_modules/.pnpm/ethers@6.15.0/node_modules/ethers/src.ts/abi/abi-coder.ts:235:16)\n    at JsonRpcProvider.getRpcError (/Users/nitish/Desktop/agent-protocol-dsl/node_modules/.pnpm/ethers@6.15.0/node_modules/ethers/src.ts/providers/provider-jsonrpc.ts:1016:32)\n    at <anonymous> (/Users/nitish/Desktop/agent-protocol-dsl/node_modules/.pnpm/ethers@6.15.0/node_modules/ethers/src.ts/providers/provider-jsonrpc.ts:571:45)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5) {\n  code: 'CALL_EXCEPTION',\n  action: 'estimateGas',\n  data: '0x',\n  reason: 'require(false)',\n  transaction: {\n    to: '0x87870Bca3F3fD6335C3F4ce8392D69350B4fA4E2',\n    data: '0x617ba037000000000000000000000000c02aaa39b223fe8d0a0e5c4f27ead9083c756cc2000000000000000000000000000000000000000000000000016345785d8a0000000000000000000000000000f39fd6e51aad88f6f4ce6ab8827279cfffb922660000000000000000000000000000000000000000000000000000000000000000',\n    from: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'\n  },\n  invocation: null,\n  revert: null,\n  shortMessage: 'execution reverted (no data present; likely require(false) occurred',\n  info: {\n    error: { code: 3, message: 'execution reverted', data: '0x' },\n    payload: {\n      method: 'eth_estimateGas',\n      params: [Array],\n      id: 5,\n      jsonrpc: '2.0'\n    }\n  }\n}\n"
+      ],
+      "finishedAt": 1758911661461
+    },
+    {
+      "id": "53bbb76b-37f6-44e1-9ee7-c40052d360ce",
+      "strategyId": "ee84f827-0e95-4f94-9a2b-497f559db5ef",
+      "params": {},
+      "status": "error",
+      "startedAt": 1758911688091,
+      "logs": [
+        "\n== Initial supply ==\n",
+        "balances before supply — WETH: 0.0, USDC: 0.0\n",
+        "preview aave supply calldata (len): 266 0x617ba037000000000000000000000000c02aaa39b223fe8d0a0e5c4f27ead9083c756cc2000000000000000000000000000000000000000000000000016345785d8a0000000000000000000000000000f39fd6e51aad88f6f4ce6ab8827279cfffb922\n",
+        "Error: execution reverted (no data present; likely require(false) occurred (action=\"estimateGas\", data=\"0x\", reason=\"require(false)\", transaction={ \"data\": \"0x617ba037000000000000000000000000c02aaa39b223fe8d0a0e5c4f27ead9083c756cc2000000000000000000000000000000000000000000000000016345785d8a0000000000000000000000000000f39fd6e51aad88f6f4ce6ab8827279cfffb922660000000000000000000000000000000000000000000000000000000000000000\", \"from\": \"0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266\", \"to\": \"0x87870Bca3F3fD6335C3F4ce8392D69350B4fA4E2\" }, invocation=null, revert=null, code=CALL_EXCEPTION, version=6.15.0)\n    at makeError (/Users/nitish/Desktop/agent-protocol-dsl/node_modules/.pnpm/ethers@6.15.0/node_modules/ethers/src.ts/utils/errors.ts:698:21)\n    at getBuiltinCallException (/Users/nitish/Desktop/agent-protocol-dsl/node_modules/.pnpm/ethers@6.15.0/node_modules/ethers/src.ts/abi/abi-coder.ts:118:12)\n    at Function.getBuiltinCallException (/Users/nitish/Desktop/agent-protocol-dsl/node_modules/.pnpm/ethers@6.15.0/node_modules/ethers/src.ts/abi/abi-coder.ts:235:16)\n    at JsonRpcProvider.getRpcError (/Users/nitish/Desktop/agent-protocol-dsl/node_modules/.pnpm/ethers@6.15.0/node_modules/ethers/src.ts/providers/provider-jsonrpc.ts:1016:32)\n    at <anonymous> (/Users/nitish/Desktop/agent-protocol-dsl/node_modules/.pnpm/ethers@6.15.0/node_modules/ethers/src.ts/providers/provider-jsonrpc.ts:571:45)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5) {\n  code: 'CALL_EXCEPTION',\n  action: 'estimateGas',\n  data: '0x',\n  reason: 'require(false)',\n  transaction: {\n    to: '0x87870Bca3F3fD6335C3F4ce8392D69350B4fA4E2',\n    data: '0x617ba037000000000000000000000000c02aaa39b223fe8d0a0e5c4f27ead9083c756cc2000000000000000000000000000000000000000000000000016345785d8a0000000000000000000000000000f39fd6e51aad88f6f4ce6ab8827279cfffb922660000000000000000000000000000000000000000000000000000000000000000',\n    from: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'\n  },\n  invocation: null,\n  revert: null,\n  shortMessage: 'execution reverted (no data present; likely require(false) occurred',\n  info: {\n    error: { code: 3, message: 'execution reverted', data: '0x' },\n    payload: {\n      method: 'eth_estimateGas',\n      params: [Array],\n      id: 5,\n      jsonrpc: '2.0'\n    }\n  }\n}\n"
+      ],
+      "finishedAt": 1758911688939
+    },
+    {
+      "id": "bf743491-b160-478d-970d-1cc352ae631e",
+      "strategyId": "7bd75c3c-abb4-49dc-b35a-a4f772ef3ff1",
+      "params": {},
+      "status": "error",
+      "startedAt": 1758911693568,
+      "logs": [
+        "[Agent] Signal: SHORT (-1) | Confidence: 0.33\n",
+        "[Agent] Selling 130 ETH for ~$570937.90 USDC on Uniswap v3\n[OnchainBroker] Preparing on-chain order for ETH-USD: unitsDelta=-130 price=4391.83\n[OnchainBroker] executing schema=file:///Users/nitish/Desktop/agent-protocol-dsl/schemas/uniswap_v3/actions/exactInputSingle.json inputs={\"protocol\":\"uniswap_v3\",\"method\":\"exactInputSingle\",\"contract\":\"0xE592427A0AEce92De3Edee1F18E0157C05861564\",\"params\":{\"contract\":\"0xE592427A0AEce92De3Edee1F18E0157C05861564\",\"tokenIn\":\"0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2\",\"tokenOut\":\"0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48\",\"fee\":3000,\"recipient\":\"0xd238ff944bacb478cbed5efcae784d7bf4f2ff80\",\"deadline\":1758912894,\"amountIn\":\"130000000000000000000\",\"amountOutMinimum\":\"0\",\"sqrtPriceLimitX96\":\"0\"},\"chainId\":1}\n[agent] running schema: file:///Users/nitish/Desktop/agent-protocol-dsl/schemas/uniswap_v3/actions/exactInputSingle.json simulateOnly: false\n[agent] inputs: {\n  protocol: 'uniswap_v3',\n  method: 'exactInputSingle',\n  contract: '0xE592427A0AEce92De3Edee1F18E0157C05861564',\n  params: {\n    contract: '0xE592427A0AEce92De3Edee1F18E0157C05861564',\n    tokenIn: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',\n    tokenOut: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',\n    fee: 3000,\n    recipient: '0xd238ff944bacb478cbed5efcae784d7bf4f2ff80',\n    deadline: 1758912894,\n    amountIn: '130000000000000000000',\n    amountOutMinimum: '0',\n    sqrtPriceLimitX96: '0'\n  },\n  chainId: 1\n}\n",
+        "[exec] schema: file:///Users/nitish/Desktop/agent-protocol-dsl/schemas/uniswap_v3/actions/exactInputSingle.json\n",
+        "[exec] rpc: http://127.0.0.1:8545 simulateOnly: false\n[exec] rawInputs: {\n  protocol: 'uniswap_v3',\n  method: 'exactInputSingle',\n  contract: '0xE592427A0AEce92De3Edee1F18E0157C05861564',\n  params: {\n    contract: '0xE592427A0AEce92De3Edee1F18E0157C05861564',\n    tokenIn: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',\n    tokenOut: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',\n    fee: 3000,\n    recipient: '0xd238ff944bacb478cbed5efcae784d7bf4f2ff80',\n    deadline: 1758912894,\n    amountIn: '130000000000000000000',\n    amountOutMinimum: '0',\n    sqrtPriceLimitX96: '0'\n  },\n  chainId: 1\n}\n",
+        "[OnchainBroker] error executing on-chain order: Error: Missing required input: tokenIn\n    at applyDefaultsAndTemplates (/Users/nitish/Desktop/agent-protocol-dsl/src/exec/helpers.ts:18:55)\n    at execFromFile (/Users/nitish/Desktop/agent-protocol-dsl/src/exec/executor.ts:46:24)\n    at async runAgentAction (/Users/nitish/Desktop/agent-protocol-dsl/src/exec/agent.ts:33:18)\n    at async OnchainBroker.placeMarketOrder (/Users/nitish/Desktop/agent-protocol-dsl/examples/trading_agent.ts:367:28)\n    at async run (/Users/nitish/Desktop/agent-protocol-dsl/examples/trading_agent.ts:224:21)\n    at async <anonymous> (/Users/nitish/Desktop/agent-protocol-dsl/examples/trading_agent.ts:452:13)\n",
+        "node:internal/modules/run_main:123\n    triggerUncaughtException(\n    ^\n\nError: Missing required input: tokenIn\n    at applyDefaultsAndTemplates (/Users/nitish/Desktop/agent-protocol-dsl/src/exec/helpers.ts:18:55)\n    at execFromFile (/Users/nitish/Desktop/agent-protocol-dsl/src/exec/executor.ts:46:24)\n    at async runAgentAction (/Users/nitish/Desktop/agent-protocol-dsl/src/exec/agent.ts:33:18)\n    at async OnchainBroker.placeMarketOrder (/Users/nitish/Desktop/agent-protocol-dsl/examples/trading_agent.ts:367:28)\n    at async run (/Users/nitish/Desktop/agent-protocol-dsl/examples/trading_agent.ts:224:21)\n    at async <anonymous> (/Users/nitish/Desktop/agent-protocol-dsl/examples/trading_agent.ts:452:13)\n\nNode.js v22.16.0\n"
+      ],
+      "finishedAt": 1758911694409
+    },
+    {
+      "id": "3ae09bcc-6f85-41aa-9174-7893ce6d844d",
+      "strategyId": "7bd75c3c-abb4-49dc-b35a-a4f772ef3ff1",
+      "params": {},
+      "status": "error",
+      "startedAt": 1758912359384,
+      "logs": [
+        "[Agent] Signal: SHORT (-1) | Confidence: 0.33\n",
+        "[Agent] Selling 130 ETH for ~$570937.90 USDC on Uniswap v3\n[OnchainBroker] Preparing on-chain order for ETH-USD: unitsDelta=-130 price=4391.83\n[OnchainBroker] executing schema=file:///Users/nitish/Desktop/agent-protocol-dsl/schemas/uniswap_v3/actions/exactInputSingle.json inputs={\"protocol\":\"uniswap_v3\",\"method\":\"exactInputSingle\",\"contract\":\"0xE592427A0AEce92De3Edee1F18E0157C05861564\",\"params\":{\"contract\":\"0xE592427A0AEce92De3Edee1F18E0157C05861564\",\"tokenIn\":\"0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2\",\"tokenOut\":\"0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48\",\"fee\":3000,\"recipient\":\"0xd238ff944bacb478cbed5efcae784d7bf4f2ff80\",\"deadline\":1758913560,\"amountIn\":\"130000000000000000000\",\"amountOutMinimum\":\"0\",\"sqrtPriceLimitX96\":\"0\"},\"chainId\":1}\n[agent] running schema: file:///Users/nitish/Desktop/agent-protocol-dsl/schemas/uniswap_v3/actions/exactInputSingle.json simulateOnly: false\n[agent] inputs: {\n  protocol: 'uniswap_v3',\n  method: 'exactInputSingle',\n  contract: '0xE592427A0AEce92De3Edee1F18E0157C05861564',\n  params: {\n    contract: '0xE592427A0AEce92De3Edee1F18E0157C05861564',\n    tokenIn: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',\n    tokenOut: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',\n    fee: 3000,\n    recipient: '0xd238ff944bacb478cbed5efcae784d7bf4f2ff80',\n    deadline: 1758913560,\n    amountIn: '130000000000000000000',\n    amountOutMinimum: '0',\n    sqrtPriceLimitX96: '0'\n  },\n  chainId: 1\n}\n",
+        "[exec] schema: file:///Users/nitish/Desktop/agent-protocol-dsl/schemas/uniswap_v3/actions/exactInputSingle.json\n",
+        "[exec] rpc: http://127.0.0.1:8545 simulateOnly: false\n[exec] rawInputs: {\n  protocol: 'uniswap_v3',\n  method: 'exactInputSingle',\n  contract: '0xE592427A0AEce92De3Edee1F18E0157C05861564',\n  params: {\n    contract: '0xE592427A0AEce92De3Edee1F18E0157C05861564',\n    tokenIn: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',\n    tokenOut: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',\n    fee: 3000,\n    recipient: '0xd238ff944bacb478cbed5efcae784d7bf4f2ff80',\n    deadline: 1758913560,\n    amountIn: '130000000000000000000',\n    amountOutMinimum: '0',\n    sqrtPriceLimitX96: '0'\n  },\n  chainId: 1\n}\n",
+        "[OnchainBroker] error executing on-chain order: Error: Missing required input: tokenIn\n    at applyDefaultsAndTemplates (/Users/nitish/Desktop/agent-protocol-dsl/src/exec/helpers.ts:18:55)\n    at execFromFile (/Users/nitish/Desktop/agent-protocol-dsl/src/exec/executor.ts:46:24)\n    at async runAgentAction (/Users/nitish/Desktop/agent-protocol-dsl/src/exec/agent.ts:33:18)\n    at async OnchainBroker.placeMarketOrder (/Users/nitish/Desktop/agent-protocol-dsl/examples/trading_agent.ts:367:28)\n    at async run (/Users/nitish/Desktop/agent-protocol-dsl/examples/trading_agent.ts:224:21)\n    at async <anonymous> (/Users/nitish/Desktop/agent-protocol-dsl/examples/trading_agent.ts:452:13)\n",
+        "node:internal/modules/run_main:123\n    triggerUncaughtException(\n    ^\n\nError: Missing required input: tokenIn\n    at applyDefaultsAndTemplates (/Users/nitish/Desktop/agent-protocol-dsl/src/exec/helpers.ts:18:55)\n    at execFromFile (/Users/nitish/Desktop/agent-protocol-dsl/src/exec/executor.ts:46:24)\n    at async runAgentAction (/Users/nitish/Desktop/agent-protocol-dsl/src/exec/agent.ts:33:18)\n    at async OnchainBroker.placeMarketOrder (/Users/nitish/Desktop/agent-protocol-dsl/examples/trading_agent.ts:367:28)\n    at async run (/Users/nitish/Desktop/agent-protocol-dsl/examples/trading_agent.ts:224:21)\n    at async <anonymous> (/Users/nitish/Desktop/agent-protocol-dsl/examples/trading_agent.ts:452:13)\n\nNode.js v22.16.0\n"
+      ],
+      "finishedAt": 1758912360432
+    },
+    {
+      "id": "e20ccbff-9eeb-43b1-adbf-a49672f37aa2",
+      "strategyId": "7bd75c3c-abb4-49dc-b35a-a4f772ef3ff1",
+      "params": {},
+      "status": "error",
+      "startedAt": 1758912370971,
+      "logs": [
+        "[Agent] Signal: SHORT (-1) | Confidence: 0.33\n",
+        "[Agent] Selling 130 ETH for ~$570937.90 USDC on Uniswap v3\n[OnchainBroker] Preparing on-chain order for ETH-USD: unitsDelta=-130 price=4391.83\n[OnchainBroker] executing schema=file:///Users/nitish/Desktop/agent-protocol-dsl/schemas/uniswap_v3/actions/exactInputSingle.json inputs={\"protocol\":\"uniswap_v3\",\"method\":\"exactInputSingle\",\"contract\":\"0xE592427A0AEce92De3Edee1F18E0157C05861564\",\"params\":{\"contract\":\"0xE592427A0AEce92De3Edee1F18E0157C05861564\",\"tokenIn\":\"0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2\",\"tokenOut\":\"0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48\",\"fee\":3000,\"recipient\":\"0xd238ff944bacb478cbed5efcae784d7bf4f2ff80\",\"deadline\":1758913571,\"amountIn\":\"130000000000000000000\",\"amountOutMinimum\":\"0\",\"sqrtPriceLimitX96\":\"0\"},\"chainId\":1}\n[agent] running schema: file:///Users/nitish/Desktop/agent-protocol-dsl/schemas/uniswap_v3/actions/exactInputSingle.json simulateOnly: false\n[agent] inputs: {\n  protocol: 'uniswap_v3',\n  method: 'exactInputSingle',\n  contract: '0xE592427A0AEce92De3Edee1F18E0157C05861564',\n  params: {\n    contract: '0xE592427A0AEce92De3Edee1F18E0157C05861564',\n    tokenIn: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',\n    tokenOut: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',\n    fee: 3000,\n    recipient: '0xd238ff944bacb478cbed5efcae784d7bf4f2ff80',\n    deadline: 1758913571,\n    amountIn: '130000000000000000000',\n    amountOutMinimum: '0',\n    sqrtPriceLimitX96: '0'\n  },\n  chainId: 1\n}\n",
+        "[exec] schema: file:///Users/nitish/Desktop/agent-protocol-dsl/schemas/uniswap_v3/actions/exactInputSingle.json\n",
+        "[exec] rpc: http://127.0.0.1:8545 simulateOnly: false\n[exec] rawInputs: {\n  protocol: 'uniswap_v3',\n  method: 'exactInputSingle',\n  contract: '0xE592427A0AEce92De3Edee1F18E0157C05861564',\n  params: {\n    contract: '0xE592427A0AEce92De3Edee1F18E0157C05861564',\n    tokenIn: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',\n    tokenOut: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',\n    fee: 3000,\n    recipient: '0xd238ff944bacb478cbed5efcae784d7bf4f2ff80',\n    deadline: 1758913571,\n    amountIn: '130000000000000000000',\n    amountOutMinimum: '0',\n    sqrtPriceLimitX96: '0'\n  },\n  chainId: 1\n}\n",
+        "[OnchainBroker] error executing on-chain order: Error: Missing required input: tokenIn\n    at applyDefaultsAndTemplates (/Users/nitish/Desktop/agent-protocol-dsl/src/exec/helpers.ts:18:55)\n    at execFromFile (/Users/nitish/Desktop/agent-protocol-dsl/src/exec/executor.ts:46:24)\n    at async runAgentAction (/Users/nitish/Desktop/agent-protocol-dsl/src/exec/agent.ts:33:18)\n    at async OnchainBroker.placeMarketOrder (/Users/nitish/Desktop/agent-protocol-dsl/examples/trading_agent.ts:367:28)\n    at async run (/Users/nitish/Desktop/agent-protocol-dsl/examples/trading_agent.ts:224:21)\n    at async <anonymous> (/Users/nitish/Desktop/agent-protocol-dsl/examples/trading_agent.ts:452:13)\n",
+        "node:internal/modules/run_main:123\n    triggerUncaughtException(\n    ^\n\nError: Missing required input: tokenIn\n    at applyDefaultsAndTemplates (/Users/nitish/Desktop/agent-protocol-dsl/src/exec/helpers.ts:18:55)\n    at execFromFile (/Users/nitish/Desktop/agent-protocol-dsl/src/exec/executor.ts:46:24)\n    at async runAgentAction (/Users/nitish/Desktop/agent-protocol-dsl/src/exec/agent.ts:33:18)\n    at async OnchainBroker.placeMarketOrder (/Users/nitish/Desktop/agent-protocol-dsl/examples/trading_agent.ts:367:28)\n    at async run (/Users/nitish/Desktop/agent-protocol-dsl/examples/trading_agent.ts:224:21)\n    at async <anonymous> (/Users/nitish/Desktop/agent-protocol-dsl/examples/trading_agent.ts:452:13)\n\nNode.js v22.16.0\n"
+      ],
+      "finishedAt": 1758912371765
+    },
+    {
+      "id": "e49daf9d-5634-4d94-9fa3-a78289ac3609",
+      "strategyId": "ee84f827-0e95-4f94-9a2b-497f559db5ef",
+      "params": {},
+      "status": "error",
+      "startedAt": 1758916599295,
+      "logs": [],
+      "finishedAt": 1758916599297
+    }
+  ]
+}

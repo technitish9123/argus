@@ -1,0 +1,29 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "aave_v3.repay",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "protocol": { "const": "aave_v3" },
+    "contract": { "const": "pool" },
+    "method":   { "const": "repay" },
+    "params": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["asset","amount","rateMode","onBehalfOf"],
+      "properties": {
+        "asset":      { "type": "string", "pattern": "^0x[a-fA-F0-9]{40}$" },
+        "amount":     { "type": "string", "pattern": "^[0-9]+$" },
+        "rateMode":   { "type": "integer", "enum": [1,2] },
+        "onBehalfOf": { "type": "string", "pattern": "^0x[a-fA-F0-9]{40}$" }
+      }
+    },
+    "chainId": { "type": "integer", "minimum": 1 }
+  },
+  "required": ["protocol","contract","method","params"],
+  "x-abi": "function repay(address asset, uint256 amount, uint256 rateMode, address onBehalfOf) returns (uint256)",
+  "x-spenderRole": "pool",
+  "x-debits": [
+    { "amountKey": "amount", "tokenParam": "asset" }
+  ]
+}

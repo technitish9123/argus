@@ -1,0 +1,538 @@
+Below is a **drop‑in v1 pack** of the revised action schemas, including a shared `$defs` module, a base action‑envelope schema, and per‑protocol action schemas. They implement the fixes we discussed: consistent `$id`, versioning, `chainId` required, normalized `x.*` metadata (`x.abi`, `x.debits`, `x.args`), strict hex/uint patterns, Uniswap fee `100` added, positive `value` enforced when payable, and consolidated debit/approval hints.
+
+---
+
+## 00\_shared / dsl-v1-\$defs.json
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ank.dev/dsl/v1/$defs.json",
+  "$defs": {
+    "Address": { "type": "string", "pattern": "^0x[a-fA-F0-9]{40}$", "description": "EVM address (20 bytes, checksummed not enforced)" },
+    "BytesHexEven": { "type": "string", "pattern": "^0x([a-fA-F0-9]{2})*$", "description": "0x‑prefixed even-length hex" },
+    "Bytes32": { "type": "string", "pattern": "^0x([a-fA-F0-9]{2}){32}$", "description": "32‑byte hex" },
+    "Uint256Str": { "type": "string", "pattern": "^[0-9]+$", "description": "Decimal string for uint256" },
+    "ChainId": { "type": "integer", "minimum": 1, "description": "EVM chain id" },
+    "Role": { "type": "string", "pattern": "^[a-z][a-z0-9_]{1,63}$", "description": "Role key resolvable via AddressRegistry" },
+    "RoleOrAddress": { "anyOf": [ { "$ref": "#/$defs/Address" }, { "$ref": "#/$defs/Role" } ], "description": "Either a raw address or a registry role" },
+    "Deadline": { "type": "integer", "minimum": 0, "description": "Unix timestamp (seconds)" },
+    "Bps": { "type": "integer", "minimum": 0, "maximum": 10000, "description": "Basis points (0-10000)" }
+  }
+}
+```
+
+---
+
+## 01\_base / action-envelope.base.v1.json
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ank.dev/dsl/v1/action-envelope.base.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "protocol": { "type": "string" },
+    "contract": { "$ref": "https://ank.dev/dsl/v1/$defs.json#/$defs/RoleOrAddress" },
+    "method": { "type": "string" },
+    "params": { "type": "object" },
+    "value": { "$ref": "https://ank.dev/dsl/v1/$defs.json#/$defs/Uint256Str", "description": "Wei for payable functions" },
+    "chainId": { "$ref": "https://ank.dev/dsl/v1/$defs.json#/$defs/ChainId" },
+    "x": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "abi": {
+          "type": "object",
+          "required": ["signature", "payable"],
+          "properties": {
+            "signature": { "type": "string", "description": "Solidity signature: function f(...) [payable] [returns(...)]" },
+            "payable": { "type": "boolean" }
+          }
+        },
+        "debits": {
+          "type": "array",
+          "description": "Approval/debit hints for auto-approvals",
+          "items": {
+            "type": "object",
+            "required": ["amountParam"],
+            "properties": {
+              "amountParam": { "type": "string", "description": "params key holding the amount (decimal string) or 'value'" },
+              "tokenParam": { "type": "string", "description": "params key that resolves to the ERC20 token address" },
+              "tokenRole": { "$ref": "https://ank.dev/dsl/v1/$defs.json#/$defs/Role", "description": "Use protocol role as token address" },
+              "tokenFromPath": { "type": "boolean", "description": "Set true when token is implied by first hop in a path" },
+              "useValue": { "type": "boolean", "description": "When amount is the tx value (native)" },
+              "spenderRole": { "$ref": "https://ank.dev/dsl/v1/$defs.json#/$defs/Role", "description": "Spender role whose address must be approved" }
+            },
+            "oneOf": [
+              { "required": ["tokenParam"] },
+              { "required": ["tokenRole"] },
+              { "required": ["tokenFromPath"] },
+              { "required": ["useValue"] }
+            ]
+          }
+        },
+        "args": {
+          "type": "object",
+          "properties": {
+            "order": { "type": "array", "items": { "type": "string" }, "description": "ABI argument order derived from params" },
+            "map": { "type": "object", "additionalProperties": { "type": "string" }, "description": "Optional mapping paramName -> abiName" }
+          }
+        },
+        "allowedRoles": { "type": "array", "items": { "$ref": "https://ank.dev/dsl/v1/$defs.json#/$defs/Role" } }
+      }
+    }
+  },
+  "required": ["protocol", "contract", "method", "params", "chainId", "x"],
+  "allOf": [
+    {
+      "if": { "properties": { "x": { "properties": { "abi": { "properties": { "payable": { "const": true } } } } } } },
+      "then": {
+        "required": ["value"],
+        "properties": { "value": { "type": "string", "pattern": "^[1-9][0-9]*$", "description": "Must be > 0 when payable" } }
+      }
+    }
+  ]
+}
+```
+
+---
+
+## erc20 / approve.v1.json
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ank.dev/dsl/v1/actions/erc20/approve.schema.json",
+  "allOf": [ { "$ref": "https://ank.dev/dsl/v1/action-envelope.base.schema.json" } ],
+  "properties": {
+    "protocol": { "const": "erc20" },
+    "contract": { "$ref": "https://ank.dev/dsl/v1/$defs.json#/$defs/RoleOrAddress", "description": "The ERC20 token contract" },
+    "method": { "const": "approve" },
+    "params": {
+      "type": "object",
+      "required": ["spender", "amount"],
+      "additionalProperties": false,
+      "properties": {
+        "spender": { "$ref": "https://ank.dev/dsl/v1/$defs.json#/$defs/RoleOrAddress" },
+        "amount": { "$ref": "https://ank.dev/dsl/v1/$defs.json#/$defs/Uint256Str" }
+      }
+    },
+    "x": {
+      "properties": {
+        "abi": { "properties": { "signature": { "const": "function approve(address spender,uint256 amount) returns (bool)" }, "payable": { "const": false } } },
+        "debits": { "const": [] },
+        "args": { "properties": { "order": { "const": ["spender", "amount"] } } },
+        "allowedRoles": { "const": [] }
+      }
+    }
+  }
+}
+```
+
+---
+
+## uniswap\_v3 / exactInputSingle.v1.json
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ank.dev/dsl/v1/actions/uniswap_v3/exactInputSingle.schema.json",
+  "allOf": [ { "$ref": "https://ank.dev/dsl/v1/action-envelope.base.schema.json" } ],
+  "properties": {
+    "protocol": { "const": "uniswap_v3" },
+    "contract": { "$ref": "https://ank.dev/dsl/v1/$defs.json#/$defs/RoleOrAddress", "description": "router role or address" },
+    "method": { "const": "exactInputSingle" },
+    "params": {
+      "type": "object",
+      "required": ["tokenIn", "tokenOut", "fee", "recipient", "deadline", "amountIn", "amountOutMinimum", "sqrtPriceLimitX96"],
+      "additionalProperties": false,
+      "properties": {
+        "tokenIn": { "$ref": "https://ank.dev/dsl/v1/$defs.json#/$defs/Address" },
+        "tokenOut": { "$ref": "https://ank.dev/dsl/v1/$defs.json#/$defs/Address" },
+        "fee": { "type": "integer", "enum": [100, 500, 3000, 10000] },
+        "recipient": { "$ref": "https://ank.dev/dsl/v1/$defs.json#/$defs/Address" },
+        "deadline": { "$ref": "https://ank.dev/dsl/v1/$defs.json#/$defs/Deadline" },
+        "amountIn": { "$ref": "https://ank.dev/dsl/v1/$defs.json#/$defs/Uint256Str" },
+        "amountOutMinimum": { "$ref": "https://ank.dev/dsl/v1/$defs.json#/$defs/Uint256Str" },
+        "sqrtPriceLimitX96": { "$ref": "https://ank.dev/dsl/v1/$defs.json#/$defs/Uint256Str", "description": "0 for no limit" }
+      }
+    },
+    "x": {
+      "properties": {
+        "abi": { "properties": { "signature": { "const": "function exactInputSingle((address,address,uint24,address,uint256,uint256,uint256,uint160)) returns (uint256)" }, "payable": { "const": false } } },
+        "debits": { "const": [ { "tokenParam": "tokenIn", "amountParam": "amountIn", "spenderRole": "router" } ] },
+        "args": { "properties": { "order": { "const": ["tokenIn","tokenOut","fee","recipient","deadline","amountIn","amountOutMinimum","sqrtPriceLimitX96"] } } },
+        "allowedRoles": { "const": ["router"] }
+      }
+    }
+  }
+}
+```
+
+---
+
+## uniswap\_v3 / exactOutputSingle.v1.json
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ank.dev/dsl/v1/actions/uniswap_v3/exactOutputSingle.schema.json",
+  "allOf": [ { "$ref": "https://ank.dev/dsl/v1/action-envelope.base.schema.json" } ],
+  "properties": {
+    "protocol": { "const": "uniswap_v3" },
+    "contract": { "$ref": "https://ank.dev/dsl/v1/$defs.json#/$defs/RoleOrAddress" },
+    "method": { "const": "exactOutputSingle" },
+    "params": {
+      "type": "object",
+      "required": ["tokenIn", "tokenOut", "fee", "recipient", "deadline", "amountOut", "amountInMaximum", "sqrtPriceLimitX96"],
+      "additionalProperties": false,
+      "properties": {
+        "tokenIn": { "$ref": "https://ank.dev/dsl/v1/$defs.json#/$defs/Address" },
+        "tokenOut": { "$ref": "https://ank.dev/dsl/v1/$defs.json#/$defs/Address" },
+        "fee": { "type": "integer", "enum": [100, 500, 3000, 10000] },
+        "recipient": { "$ref": "https://ank.dev/dsl/v1/$defs.json#/$defs/Address" },
+        "deadline": { "$ref": "https://ank.dev/dsl/v1/$defs.json#/$defs/Deadline" },
+        "amountOut": { "$ref": "https://ank.dev/dsl/v1/$defs.json#/$defs/Uint256Str" },
+        "amountInMaximum": { "$ref": "https://ank.dev/dsl/v1/$defs.json#/$defs/Uint256Str" },
+        "sqrtPriceLimitX96": { "$ref": "https://ank.dev/dsl/v1/$defs.json#/$defs/Uint256Str" }
+      }
+    },
+    "x": {
+      "properties": {
+        "abi": { "properties": { "signature": { "const": "function exactOutputSingle((address,address,uint24,address,uint256,uint256,uint256,uint160)) returns (uint256)" }, "payable": { "const": false } } },
+        "debits": { "const": [ { "tokenParam": "tokenIn", "amountParam": "amountInMaximum", "spenderRole": "router" } ] },
+        "args": { "properties": { "order": { "const": ["tokenIn","tokenOut","fee","recipient","deadline","amountOut","amountInMaximum","sqrtPriceLimitX96"] } } },
+        "allowedRoles": { "const": ["router"] }
+      }
+    }
+  }
+}
+```
+
+---
+
+## uniswap\_v3 / exactInput.v1.json (path‑based)
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ank.dev/dsl/v1/actions/uniswap_v3/exactInput.schema.json",
+  "allOf": [ { "$ref": "https://ank.dev/dsl/v1/action-envelope.base.schema.json" } ],
+  "properties": {
+    "protocol": { "const": "uniswap_v3" },
+    "contract": { "$ref": "https://ank.dev/dsl/v1/$defs.json#/$defs/RoleOrAddress" },
+    "method": { "const": "exactInput" },
+    "params": {
+      "type": "object",
+      "required": ["path", "recipient", "deadline", "amountIn", "amountOutMinimum"],
+      "additionalProperties": false,
+      "properties": {
+        "path": { "$ref": "https://ank.dev/dsl/v1/$defs.json#/$defs/BytesHexEven", "description": "encoded path: tokenIn|fee|token.." },
+        "recipient": { "$ref": "https://ank.dev/dsl/v1/$defs.json#/$defs/Address" },
+        "deadline": { "$ref": "https://ank.dev/dsl/v1/$defs.json#/$defs/Deadline" },
+        "amountIn": { "$ref": "https://ank.dev/dsl/v1/$defs.json#/$defs/Uint256Str" },
+        "amountOutMinimum": { "$ref": "https://ank.dev/dsl/v1/$defs.json#/$defs/Uint256Str" }
+      }
+    },
+    "x": {
+      "properties": {
+        "abi": { "properties": { "signature": { "const": "function exactInput((bytes,address,uint256,uint256)) returns (uint256)" }, "payable": { "const": false } } },
+        "debits": { "const": [ { "tokenFromPath": true, "amountParam": "amountIn", "spenderRole": "router" } ] },
+        "args": { "properties": { "order": { "const": ["path","recipient","deadline","amountIn","amountOutMinimum"] } } },
+        "allowedRoles": { "const": ["router"] }
+      }
+    }
+  }
+}
+```
+
+---
+
+## aave\_v3 / supply.v1.json
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ank.dev/dsl/v1/actions/aave_v3/supply.schema.json",
+  "allOf": [ { "$ref": "https://ank.dev/dsl/v1/action-envelope.base.schema.json" } ],
+  "properties": {
+    "protocol": { "const": "aave_v3" },
+    "contract": { "$ref": "https://ank.dev/dsl/v1/$defs.json#/$defs/RoleOrAddress", "description": "pool role or address" },
+    "method": { "const": "supply" },
+    "params": {
+      "type": "object",
+      "required": ["asset", "amount", "onBehalfOf", "referralCode"],
+      "additionalProperties": false,
+      "properties": {
+        "asset": { "$ref": "https://ank.dev/dsl/v1/$defs.json#/$defs/Address" },
+        "amount": { "$ref": "https://ank.dev/dsl/v1/$defs.json#/$defs/Uint256Str" },
+        "onBehalfOf": { "$ref": "https://ank.dev/dsl/v1/$defs.json#/$defs/Address" },
+        "referralCode": { "type": "integer", "minimum": 0, "maximum": 65535 }
+      }
+    },
+    "x": {
+      "properties": {
+        "abi": { "properties": { "signature": { "const": "function supply(address asset,uint256 amount,address onBehalfOf,uint16 referralCode)" }, "payable": { "const": false } } },
+        "debits": { "const": [ { "tokenParam": "asset", "amountParam": "amount", "spenderRole": "pool" } ] },
+        "args": { "properties": { "order": { "const": ["asset","amount","onBehalfOf","referralCode"] } } },
+        "allowedRoles": { "const": ["pool"] }
+      }
+    }
+  }
+}
+```
+
+---
+
+## aave\_v3 / repay.v1.json
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ank.dev/dsl/v1/actions/aave_v3/repay.schema.json",
+  "allOf": [ { "$ref": "https://ank.dev/dsl/v1/action-envelope.base.schema.json" } ],
+  "properties": {
+    "protocol": { "const": "aave_v3" },
+    "contract": { "$ref": "https://ank.dev/dsl/v1/$defs.json#/$defs/RoleOrAddress" },
+    "method": { "const": "repay" },
+    "params": {
+      "type": "object",
+      "required": ["asset", "amount", "interestRateMode", "onBehalfOf"],
+      "additionalProperties": false,
+      "properties": {
+        "asset": { "$ref": "https://ank.dev/dsl/v1/$defs.json#/$defs/Address" },
+        "amount": { "$ref": "https://ank.dev/dsl/v1/$defs.json#/$defs/Uint256Str" },
+        "interestRateMode": { "type": "integer", "enum": [1, 2], "description": "1=stable, 2=variable" },
+        "onBehalfOf": { "$ref": "https://ank.dev/dsl/v1/$defs.json#/$defs/Address" }
+      }
+    },
+    "x": {
+      "properties": {
+        "abi": { "properties": { "signature": { "const": "function repay(address asset,uint256 amount,uint256 interestRateMode,address onBehalfOf) returns (uint256)" }, "payable": { "const": false } } },
+        "debits": { "const": [ { "tokenParam": "asset", "amountParam": "amount", "spenderRole": "pool" } ] },
+        "args": { "properties": { "order": { "const": ["asset","amount","interestRateMode","onBehalfOf"] } } },
+        "allowedRoles": { "const": ["pool"] }
+      }
+    }
+  }
+}
+```
+
+---
+
+## lido / submit.v1.json (stake ETH)
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ank.dev/dsl/v1/actions/lido/submit.schema.json",
+  "allOf": [ { "$ref": "https://ank.dev/dsl/v1/action-envelope.base.schema.json" } ],
+  "properties": {
+    "protocol": { "const": "lido" },
+    "contract": { "$ref": "https://ank.dev/dsl/v1/$defs.json#/$defs/RoleOrAddress", "description": "steth" },
+    "method": { "const": "submit" },
+    "params": {
+      "type": "object",
+      "required": ["referral"],
+      "additionalProperties": false,
+      "properties": {
+        "referral": { "$ref": "https://ank.dev/dsl/v1/$defs.json#/$defs/Address" }
+      }
+    },
+    "x": {
+      "properties": {
+        "abi": { "properties": { "signature": { "const": "function submit(address referral) payable returns (uint256)" }, "payable": { "const": true } } },
+        "debits": { "const": [ { "useValue": true, "amountParam": "value", "spenderRole": "steth" } ] },
+        "args": { "properties": { "order": { "const": ["referral"] } } },
+        "allowedRoles": { "const": ["steth"] }
+      }
+    }
+  }
+}
+```
+
+---
+
+## lido / wrap.v1.json (wstETH)
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ank.dev/dsl/v1/actions/lido/wrap.schema.json",
+  "allOf": [ { "$ref": "https://ank.dev/dsl/v1/action-envelope.base.schema.json" } ],
+  "properties": {
+    "protocol": { "const": "lido" },
+    "contract": { "$ref": "https://ank.dev/dsl/v1/$defs.json#/$defs/RoleOrAddress", "description": "wsteth" },
+    "method": { "const": "wrap" },
+    "params": {
+      "type": "object",
+      "required": ["stETHAmount"],
+      "additionalProperties": false,
+      "properties": {
+        "stETHAmount": { "$ref": "https://ank.dev/dsl/v1/$defs.json#/$defs/Uint256Str" }
+      }
+    },
+    "x": {
+      "properties": {
+        "abi": { "properties": { "signature": { "const": "function wrap(uint256 stETHAmount) returns (uint256)" }, "payable": { "const": false } } },
+        "debits": { "const": [ { "tokenRole": "steth", "amountParam": "stETHAmount", "spenderRole": "wsteth" } ] },
+        "args": { "properties": { "order": { "const": ["stETHAmount"] } } },
+        "allowedRoles": { "const": ["wsteth"] }
+      }
+    }
+  }
+}
+```
+
+---
+
+## etherfi / deposit.v1.json (ETH deposit)
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ank.dev/dsl/v1/actions/etherfi/deposit.schema.json",
+  "allOf": [ { "$ref": "https://ank.dev/dsl/v1/action-envelope.base.schema.json" } ],
+  "properties": {
+    "protocol": { "const": "etherfi" },
+    "contract": { "$ref": "https://ank.dev/dsl/v1/$defs.json#/$defs/RoleOrAddress", "description": "depositor / router" },
+    "method": { "const": "deposit" },
+    "params": { "type": "object", "additionalProperties": false, "properties": { "referral": { "$ref": "https://ank.dev/dsl/v1/$defs.json#/$defs/Address" } } },
+    "x": {
+      "properties": {
+        "abi": { "properties": { "signature": { "const": "function deposit(address referral) payable" }, "payable": { "const": true } } },
+        "debits": { "const": [ { "useValue": true, "amountParam": "value", "spenderRole": "depositor" } ] },
+        "args": { "properties": { "order": { "const": ["referral"] } } },
+        "allowedRoles": { "const": ["depositor"] }
+      }
+    }
+  }
+}
+```
+
+---
+
+## balancer\_v2 / swapExactIn.v1.json (Vault)
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ank.dev/dsl/v1/actions/balancer_v2/swapExactIn.schema.json",
+  "allOf": [ { "$ref": "https://ank.dev/dsl/v1/action-envelope.base.schema.json" } ],
+  "properties": {
+    "protocol": { "const": "balancer_v2" },
+    "contract": { "$ref": "https://ank.dev/dsl/v1/$defs.json#/$defs/RoleOrAddress", "description": "vault" },
+    "method": { "const": "swapExactIn" },
+    "params": {
+      "type": "object",
+      "required": ["poolId", "tokenIn", "tokenOut", "amountIn", "minAmountOut", "recipient", "deadline"],
+      "additionalProperties": false,
+      "properties": {
+        "poolId": { "$ref": "https://ank.dev/dsl/v1/$defs.json#/$defs/Bytes32" },
+        "tokenIn": { "$ref": "https://ank.dev/dsl/v1/$defs.json#/$defs/Address" },
+        "tokenOut": { "$ref": "https://ank.dev/dsl/v1/$defs.json#/$defs/Address" },
+        "amountIn": { "$ref": "https://ank.dev/dsl/v1/$defs.json#/$defs/Uint256Str" },
+        "minAmountOut": { "$ref": "https://ank.dev/dsl/v1/$defs.json#/$defs/Uint256Str" },
+        "recipient": { "$ref": "https://ank.dev/dsl/v1/$defs.json#/$defs/Address" },
+        "deadline": { "$ref": "https://ank.dev/dsl/v1/$defs.json#/$defs/Deadline" }
+      }
+    },
+    "x": {
+      "properties": {
+        "abi": { "properties": { "signature": { "const": "function swap(bytes32 poolId,address tokenIn,address tokenOut,uint256 amountIn,uint256 minAmountOut,address recipient,uint256 deadline) returns (uint256 amountOut)" }, "payable": { "const": false } } },
+        "debits": { "const": [ { "tokenParam": "tokenIn", "amountParam": "amountIn", "spenderRole": "vault" } ] },
+        "args": { "properties": { "order": { "const": ["poolId","tokenIn","tokenOut","amountIn","minAmountOut","recipient","deadline"] } } },
+        "allowedRoles": { "const": ["vault"] }
+      }
+    }
+  }
+}
+```
+
+---
+
+## pendle / swapExactIn.v1.json (router)
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ank.dev/dsl/v1/actions/pendle/swapExactIn.schema.json",
+  "allOf": [ { "$ref": "https://ank.dev/dsl/v1/action-envelope.base.schema.json" } ],
+  "properties": {
+    "protocol": { "const": "pendle" },
+    "contract": { "$ref": "https://ank.dev/dsl/v1/$defs.json#/$defs/RoleOrAddress", "description": "router" },
+    "method": { "const": "swapExactIn" },
+    "params": {
+      "type": "object",
+      "required": ["tokenIn", "tokenOut", "amountIn", "minAmountOut", "recipient", "deadline"],
+      "additionalProperties": false,
+      "properties": {
+        "tokenIn": { "$ref": "https://ank.dev/dsl/v1/$defs.json#/$defs/Address" },
+        "tokenOut": { "$ref": "https://ank.dev/dsl/v1/$defs.json#/$defs/Address" },
+        "amountIn": { "$ref": "https://ank.dev/dsl/v1/$defs.json#/$defs/Uint256Str" },
+        "minAmountOut": { "$ref": "https://ank.dev/dsl/v1/$defs.json#/$defs/Uint256Str" },
+        "recipient": { "$ref": "https://ank.dev/dsl/v1/$defs.json#/$defs/Address" },
+        "deadline": { "$ref": "https://ank.dev/dsl/v1/$defs.json#/$defs/Deadline" }
+      }
+    },
+    "x": {
+      "properties": {
+        "abi": { "properties": { "signature": { "const": "function swapExactIn(address tokenIn,address tokenOut,uint256 amountIn,uint256 minAmountOut,address recipient,uint256 deadline) returns (uint256 amountOut)" }, "payable": { "const": false } } },
+        "debits": { "const": [ { "tokenParam": "tokenIn", "amountParam": "amountIn", "spenderRole": "router" } ] },
+        "args": { "properties": { "order": { "const": ["tokenIn","tokenOut","amountIn","minAmountOut","recipient","deadline"] } } },
+        "allowedRoles": { "const": ["router"] }
+      }
+    }
+  }
+}
+```
+
+---
+
+## snapshot / vote.v1.json (off‑chain)
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ank.dev/dsl/v1/actions/snapshot/vote.schema.json",
+  "allOf": [ { "$ref": "https://ank.dev/dsl/v1/action-envelope.base.schema.json" } ],
+  "properties": {
+    "protocol": { "const": "snapshot" },
+    "contract": { "const": "offchain" },
+    "method": { "const": "vote" },
+    "params": {
+      "type": "object",
+      "required": ["space", "proposal", "choice"],
+      "additionalProperties": false,
+      "properties": {
+        "space": { "type": "string" },
+        "proposal": { "type": "string" },
+        "choice": { "type": "integer", "minimum": 1 },
+        "reason": { "type": "string" }
+      }
+    },
+    "x": {
+      "properties": {
+        "abi": { "properties": { "signature": { "const": "offchain:snapshot.vote" }, "payable": { "const": false } } },
+        "debits": { "const": [] },
+        "args": { "properties": { "order": { "const": ["space","proposal","choice","reason"] } } },
+        "allowedRoles": { "const": [] }
+      }
+    }
+  }
+}
+```
+
+---
+
+### Notes
+
+* All on‑chain actions require `chainId`.
+* Payable functions enforce a **strictly positive** `value` via `if/then`.
+* `x.debits` is standardized across all actions. Use `tokenParam`, `tokenRole`, `tokenFromPath`, or `useValue` to signal the source of the debited asset; `amountParam` always names the numeric string key; `spenderRole` points to the spender.
+* Uniswap V3 includes the **0.01% (100)** fee tier.
+* Hex strictness: `BytesHexEven` ensures even‑length 0x hex for encoded paths; `Bytes32` for IDs.
+
+If you want, I can also generate a tiny `schema-index.json` per protocol (listing actions → `$id`) and a TypeScript `validate.ts` helper that preloads `$defs` and these files into AJV with URI resolution.

@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "ank://schemas/uniswap_v3/exactInput.json",
+  "title": "uniswap_v3.exactInput",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "protocol": { "const": "uniswap_v3" },
+    "contract": {
+      "anyOf": [
+        { "const": "router" },
+        { "type": "string", "pattern": "^0x[a-fA-F0-9]{40}$" }
+      ]
+    },
+    "method": { "const": "exactInput" },
+    "params": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "recipient",
+        "deadline",
+        "amountIn",
+        "amountOutMinimum"
+      ],
+      "properties": {
+        "path": { "type": "string", "pattern": "^0x[a-fA-F0-9]+$" },
+        "recipient": { "type": "string", "pattern": "^0x[a-fA-F0-9]{40}$" },
+        "deadline": { "type": "integer", "minimum": 0 },
+        "amountIn": { "type": "string", "pattern": "^[0-9]+$" },
+        "amountOutMinimum": { "type": "string", "pattern": "^[0-9]+$" },
+        "tokenIn": { "type": "string", "pattern": "^0x[a-fA-F0-9]{40}$" }
+      }
+    },
+    "chainId": { "type": "integer", "minimum": 1 },
+    "x-abi": {
+      "type": "string",
+      "const": "exactInput((bytes path,address recipient,uint256 deadline,uint256 amountIn,uint256 amountOutMinimum))"
+    },
+    "x-spenderRole": { "type": "string", "const": "router" },
+    "x-debits": {
+      "description": "Approval/debit hints for the SDK",
+      "x-hints": [{ "amountKey": "amountIn", "tokenParam": "tokenIn" }]
+    }
+  },
+  "required": ["protocol", "contract", "method", "params"]
+}

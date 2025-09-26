@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "etherfi.deposit",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "protocol": { "const": "etherfi" },
+    "contract": { "const": "liquidityPool" },
+    "method":   { "const": "deposit" },
+    "params":   { "type": "object", "additionalProperties": false },
+    "value":    { "type": "string", "pattern": "^[0-9]+$", "description": "wei to deposit" },
+    "chainId":  { "type": "integer", "minimum": 1 },
+    "x-abi":    { "type": "string", "const": "function deposit() payable returns (uint256)" }
+  },
+  "required": ["protocol","contract","method","params","value"]
+}

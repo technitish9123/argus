@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "etherfi.unwrapWeETH",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "protocol": { "const": "etherfi" },
+    "contract": { "const": "weeth" },
+    "method":   { "const": "unwrap" },
+    "params": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["weETHAmount"],
+      "properties": { "weETHAmount": { "type": "string", "pattern": "^[0-9]+$" } }
+    },
+    "chainId": { "type": "integer", "minimum": 1 },
+    "x-abi":   { "type": "string", "const": "function unwrap(uint256 weETHAmount) returns (uint256)" }
+  },
+  "required": ["protocol","contract","method","params"]
+}

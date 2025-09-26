@@ -1,0 +1,8 @@
+{
+  "protocol": "uniswap_v3",
+  "version": "1",
+  "roles": {
+    "router": { "1": "0xE592427A0AEce92De3Edee1F18E0157C05861564" },
+    "quoter": { "1": "0x61fFE014bA17989E743c5F6cB21bF9697530B21e" }
+  }
+}

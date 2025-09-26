@@ -1,0 +1,8 @@
+{
+  "protocol": "lido",
+  "version": "1",
+  "roles": {
+    "steth":  { "1": "0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84" },
+    "wsteth": { "1": "0x7f39C581F595B53c5cb19BD0b3f8dA6c935E2Ca0" }
+  }
+}

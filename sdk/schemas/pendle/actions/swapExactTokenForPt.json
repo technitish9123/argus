@@ -1,0 +1,49 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "pendle.swapExactTokenForPt",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "protocol": { "const": "pendle" },
+    "contract": {
+      "anyOf": [
+        { "const": "router" },
+        { "type": "string", "pattern": "^0x[a-fA-F0-9]{40}$" }
+      ]
+    },
+    "method": { "const": "swapExactTokenForPt" },
+    "params": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "receiver",
+        "market",
+        "tokenIn",
+        "amountIn",
+        "minPtOut",
+        "deadline"
+      ],
+      "properties": {
+        "receiver": { "type": "string", "pattern": "^0x[a-fA-F0-9]{40}$" },
+        "market": { "type": "string", "pattern": "^0x[a-fA-F0-9]{40}$" },
+        "tokenIn": { "type": "string", "pattern": "^0x[a-fA-F0-9]{40}$" },
+        "amountIn": { "type": "string", "pattern": "^[0-9]+$" },
+        "minPtOut": { "type": "string", "pattern": "^[0-9]+$" },
+        "deadline": { "type": "integer", "minimum": 0 },
+        "swapData": { "type": "object", "additionalProperties": true }
+      }
+    },
+    "chainId": { "type": "integer", "minimum": 1 },
+
+    "x-abi": {
+      "type": "string",
+      "const": "function swapExactTokenForPt(address receiver,address market,uint256 exactTokenIn,uint256 minPtOut,(address tokenIn,uint256 netTokenIn,address tokenMintSy,address pendleSwap,(uint8 swapType,address extRouter,bytes extCalldata,bool needScale) swapData) tokenInput) returns (uint256 netPtOut,uint256 netSyFee)"
+    },
+
+    "x-spenderRole": { "type": "string", "const": "router" },
+    "x-debits": {
+      "x-hints": [{ "amountKey": "amountIn", "tokenParam": "tokenIn" }]
+    }
+  },
+  "required": ["protocol", "contract", "method", "params"]
+}

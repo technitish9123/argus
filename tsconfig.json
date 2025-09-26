@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "resolveJsonModule": true,
+    "moduleResolution": "bundler",
+    "module": "ESNext",
+    "target": "ES2022",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "outDir": "dist",
+    "rootDir": ".",
+    "strict": true,
+    "declaration": true,
+    "sourceMap": true,
+    "allowSyntheticDefaultImports": true
+  },
+  "include": ["sdk/src", "types", "utils"]
+}

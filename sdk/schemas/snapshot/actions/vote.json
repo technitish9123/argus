@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "snapshot.vote",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "protocol": { "const": "snapshot" },
+    "contract": { "const": "offchain" },
+    "method":   { "const": "vote" },
+    "params": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["space","proposalId","choice"],
+      "properties": {
+        "space":      { "type": "string" },
+        "proposalId": { "type": "string" },
+        "choice":     { "type": "integer", "minimum": 0 }
+      }
+    },
+    "x-offchain": { "const": true }
+  },
+  "required": ["protocol","method","params"]
+}

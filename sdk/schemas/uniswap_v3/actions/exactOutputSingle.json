@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "uniswap_v3.exactOutputSingle",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "protocol": { "const": "uniswap_v3" },
+    "contract": {
+      "anyOf": [
+        { "const": "router" },
+        { "type": "string", "pattern": "^0x[a-fA-F0-9]{40}$" }
+      ]
+    },
+    "method": { "const": "exactOutputSingle" },
+    "params": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tokenIn",
+        "tokenOut",
+        "fee",
+        "recipient",
+        "deadline",
+        "amountOut",
+        "amountInMaximum",
+        "sqrtPriceLimitX96"
+      ],
+      "properties": {
+        "tokenIn": { "type": "string", "pattern": "^0x[a-fA-F0-9]{40}$" },
+        "tokenOut": { "type": "string", "pattern": "^0x[a-fA-F0-9]{40}$" },
+        "fee": { "type": "integer", "enum": [500, 3000, 10000] },
+        "recipient": { "type": "string", "pattern": "^0x[a-fA-F0-9]{40}$" },
+        "deadline": { "type": "integer", "minimum": 0 },
+        "amountOut": { "type": "string", "pattern": "^[0-9]+$" },
+        "amountInMaximum": { "type": "string", "pattern": "^[0-9]+$" },
+        "sqrtPriceLimitX96": { "type": "string", "pattern": "^[0-9]+$" }
+      }
+    },
+    "chainId": { "type": "integer", "minimum": 1 },
+    "x-abi": {
+      "type": "string",
+      "const": "exactOutputSingle((address tokenIn,address tokenOut,uint24 fee,address recipient,uint256 deadline,uint256 amountOut,uint256 amountInMaximum,uint160 sqrtPriceLimitX96))"
+    },
+    "x-spenderRole": { "const": "router" },
+    "x-debits": {
+      "description": "Approval/debit hints for the SDK",
+      "x-hints": [{ "amountKey": "amountInMaximum", "tokenParam": "tokenIn" }]
+    }
+  },
+  "required": ["protocol", "contract", "method", "params"]
+}

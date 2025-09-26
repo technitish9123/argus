@@ -1,0 +1,9 @@
+{
+  "protocol": "pendle",
+  "version": "3",
+  "roles": {
+    "router": {
+      "1": "0x00000000005bbb0EF59571E58418f9A4357B68A0"
+    }
+  }
+}

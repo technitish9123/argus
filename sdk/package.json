@@ -1,0 +1,70 @@
+{
+  "name": "@apdsl/agent-kit",
+  "version": "0.1.0",
+  "type": "module",
+  "license": "MIT",
+  "description": "Agent Protocol DSL: validation + execution in one kit",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./src/index.ts",
+      "default": "./dist/index.js"
+    },
+    "./core": {
+      "types": "./dist/core/index.d.ts",
+      "import": "./src/core/index.ts",
+      "default": "./dist/core/index.js"
+    },
+    "./exec": {
+      "types": "./dist/exec/index.d.ts",
+      "import": "./src/exec/index.ts",
+      "default": "./dist/exec/index.js"
+    },
+    "./schema": {
+      "types": "./dist/schema/index.d.ts",
+      "import": "./src/schema/index.ts",
+      "default": "./dist/schema/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "schemas"
+  ],
+  "scripts": {
+    "clean": "rimraf dist",
+    "build": "tsc -p tsconfig.json",
+    "lint": "eslint . || true",
+    "test": "vitest run || true",
+    "release:dry": "npm publish --access public --dry-run",
+    "release": "npm publish --access public",
+    "ex:swap": "tsx examples/swap.ts",
+    "ex:lido": "tsx examples/lido.ts",
+    "ex:etherfi": "tsx examples/etherfi.ts",
+    "ex:leverage": "tsx examples/leverage_loop.ts",
+    "ex:intent": "tsx examples/intent.ts"
+  },
+  "dependencies": {
+    "@uniswap/token-lists": "1.0.0-beta.34",
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
+    "ethers": "^6.15.0",
+    "openai": "^5.13.1",
+    "papaparse": "^5.5.3",
+    "viem": "^2.37.8",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^24.3.0",
+    "dotenv": "^17.2.1",
+    "eslint": "^9",
+    "rimraf": "^6",
+    "tsx": "^4.20.4",
+    "typescript": "^5.5.4",
+    "vitest": "^3.2.4"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

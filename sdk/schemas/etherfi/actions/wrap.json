@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "etherfi.wrapEETH",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "protocol": { "const": "etherfi" },
+    "contract": { "const": "weeth" },
+    "method":   { "const": "wrap" },
+    "params": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["eETHAmount"],
+      "properties": {
+        "eETHAmount": { "type": "string", "pattern": "^[0-9]+$" }
+      }
+    },
+    "chainId": { "type": "integer", "minimum": 1 },
+    "x-abi": { "type": "string", "const": "function wrap(uint256 eETHAmount) returns (uint256)" },
+
+    "x-debitTokenRole": { "const": "eeth" },
+    "x-debitAmountKey": { "const": "eETHAmount" }
+  },
+  "required": ["protocol","contract","method","params"]
+}

@@ -1,0 +1,34 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "morpho.borrow",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "protocol": { "const": "morpho" },
+    "contract": {
+      "anyOf": [
+        { "const": "morpho" },
+        { "type": "string", "pattern": "^0x[a-fA-F0-9]{40}$" }
+      ]
+    },
+    "method": { "const": "borrow" },
+    "params": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["market", "assets", "onBehalf", "receiver"],
+      "properties": {
+        "market": { "type": "string", "pattern": "^0x[a-fA-F0-9]{64}$" },
+        "assets": { "type": "string", "pattern": "^[0-9]+$" },
+        "onBehalf": { "type": "string", "pattern": "^0x[a-fA-F0-9]{40}$" },
+        "receiver": { "type": "string", "pattern": "^0x[a-fA-F0-9]{40}$" }
+      }
+    },
+    "chainId": { "type": "integer", "minimum": 1 },
+
+    "x-abi": {
+      "type": "string",
+      "const": "function borrow((address loanToken,address collateralToken,address oracle,address irm,uint256 lltv) marketParams,uint256 assets,uint256 shares,address onBehalf,address receiver)"
+    }
+  },
+  "required": ["protocol", "contract", "method", "params"]
+}

@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "erc20.permit",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "protocol": { "const": "erc20" },
+    "contract": { "type": "string", "pattern": "^0x[a-fA-F0-9]{40}$" },
+    "method": { "const": "permit" },
+    "params": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["owner","spender","value","deadline","v","r","s"],
+      "properties": {
+        "owner":    { "type": "string", "pattern": "^0x[a-fA-F0-9]{40}$" },
+        "spender":  { "type": "string", "pattern": "^0x[a-fA-F0-9]{40}$" },
+        "value":    { "type": "string", "pattern": "^[0-9]+$" },
+        "deadline": { "type": "integer", "minimum": 0 },
+        "v": { "type": "integer", "minimum": 27, "maximum": 28 },
+        "r": { "type": "string", "pattern": "^0x[a-fA-F0-9]{64}$" },
+        "s": { "type": "string", "pattern": "^0x[a-fA-F0-9]{64}$" }
+      }
+    },
+    "chainId": { "type": "integer", "minimum": 1 }
+  },
+  "required": ["protocol","contract","method","params"],
+  "x-abi": "function permit(address owner, address spender, uint256 value, uint256 deadline, uint8 v, bytes32 r, bytes32 s)"
+}
