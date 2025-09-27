@@ -437,11 +437,18 @@ async function main() {
         };
     };
 
+    // Prefer BOT_PRIVATE_KEY when provided by the run manager; fall back to PRIVATE_KEY for local testing.
+    const envPrivateKey = process.env.BOT_PRIVATE_KEY ?? process.env.PRIVATE_KEY;
+    const rpcUrl = process.env.RPC_URL || 'http://127.0.0.1:8545';
+    const isLive = !!process.env.BOT_PRIVATE_KEY; // if the manager injected BOT_PRIVATE_KEY, run live
+
+    console.log(`[Broker] rpc=${rpcUrl} privateKeySet=${!!envPrivateKey} live=${isLive}`);
+
     const broker = new OnchainBroker({
-        rpcUrl: process.env.RPC_URL || 'http://127.0.0.1:8545',
-        privateKey: process.env.PRIVATE_KEY || '0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80',
+        rpcUrl,
+        privateKey: envPrivateKey || '0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80',
         schemaPath,
-        simulateOnly: true, // run example in simulation mode by default to avoid requiring approvals/balances
+        simulateOnly: !isLive, // run in simulation mode unless BOT_PRIVATE_KEY is present
         buildInputs
     });
 

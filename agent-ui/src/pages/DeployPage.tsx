@@ -75,6 +75,61 @@ export default function DeployPage() {
     };
   };
 
+  // New: create run via backend and optionally fund
+  const [runId, setRunId] = useState<string | null>(null);
+  const [botAddress, setBotAddress] = useState<string | null>(null);
+  const createRun = async (live = false) => {
+    if (!id) return;
+    setLogs([]);
+    setRunning(true);
+    try {
+      const res = await fetch("http://localhost:3000/runs", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ strategyId: id, params: { ...(params || {}), simulateOnly: !live } }),
+      });
+      const data = await res.json();
+      setRunId(data.id);
+      setBotAddress(data.botAddress || null);
+      setLogs((prev) => [...prev, `Run created: ${data.id} status=${data.status}`]);
+
+      // subscribe to run logs SSE
+      const sse = new EventSource(`http://localhost:3000/runs/${data.id}/logs`);
+      sse.onmessage = (e) => {
+        try {
+          const d = JSON.parse(e.data);
+          if (d.type === "log") setLogs((p) => [...p, d.line]);
+          if (d.type === "status") setLogs((p) => [...p, `Status: ${d.status}`]);
+        } catch (err) {}
+      };
+      sse.onerror = () => {
+        setLogs((p) => [...p, "SSE error"]);
+        sse.close();
+      };
+
+    } catch (err) {
+      console.error(err);
+      setLogs((p) => [...p, `Error creating run: ${String(err)}`]);
+      setRunning(false);
+    }
+  };
+
+  const fundRun = async (amount = "0.05") => {
+    if (!runId) return;
+    try {
+      const res = await fetch(`http://localhost:3000/runs/${runId}/fund`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amount }),
+      });
+      const data = await res.json();
+      if (data.ok) setLogs((p) => [...p, `Funded run ${runId} tx=${data.txHash}`]);
+      else setLogs((p) => [...p, `Fund error: ${JSON.stringify(data)}`]);
+    } catch (err) {
+      setLogs((p) => [...p, `Fund request failed: ${String(err)}`]);
+    }
+  };
+
   if (loading) {
     return <p className="p-8 text-gray-400">Loading strategy...</p>;
   }
@@ -101,6 +156,35 @@ export default function DeployPage() {
         running={running}
         onDeploy={handleDeploy}
       />
+
+      {/* Run create / fund panel */}
+      <div className="mt-6 bg-gray-900 p-4 rounded">
+        <h3 className="font-semibold mb-2">Run / Funding</h3>
+        <div className="flex items-center gap-2">
+          <button
+            className="px-3 py-1 bg-indigo-600 rounded hover:bg-indigo-500"
+            onClick={() => createRun(false)}
+          >
+            Create (simulate)
+          </button>
+          <button
+            className="px-3 py-1 bg-emerald-600 rounded hover:bg-emerald-500"
+            onClick={() => createRun(true)}
+          >
+            Create (live)
+          </button>
+          <button
+            className="px-3 py-1 bg-yellow-600 rounded hover:bg-yellow-500"
+            onClick={() => fundRun("0.05")}
+          >
+            Fund 0.05 ETH
+          </button>
+        </div>
+        <div className="mt-3 text-sm text-gray-300">
+          <div>Run ID: {runId ?? "—"}</div>
+          <div>Bot: {botAddress ?? "—"}</div>
+        </div>
+      </div>
 
       {/* Logs */}
       <LogsViewer logs={logs} />

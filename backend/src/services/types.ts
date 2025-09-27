@@ -1,4 +1,4 @@
-export type RunStatus = "starting" | "running" | "exited" | "error" | "killed";
+export type RunStatus = "starting" | "waiting_for_funds" | "running" | "exited" | "error" | "killed";
 
 export interface Strategy {
     id: string;
@@ -18,6 +18,8 @@ export interface Run {
     startedAt: number;
     finishedAt?: number;
     logs: string[];
+    botAddress?: string;
+    botIndex?: number;
 }
 
 export interface DB {
