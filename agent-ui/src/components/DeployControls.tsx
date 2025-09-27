@@ -1,4 +1,3 @@
-// src/components/DeployControls.tsx
 export default function DeployControls({
   running,
   onDeploy,
@@ -7,14 +6,25 @@ export default function DeployControls({
   onDeploy: () => void;
 }) {
   return (
-    <button
-      onClick={onDeploy}
-      disabled={running}
-      className={`${
-        running ? "bg-gray-500" : "bg-green-600 hover:bg-green-700"
-      } text-white px-6 py-2 rounded-lg`}
-    >
-      {running ? "Running..." : "Deploy Strategy"}
-    </button>
+    <div className="mt-4 flex justify-end">
+      <button
+        onClick={onDeploy}
+        disabled={running}
+        className="
+          px-4 py-1.5 
+          text-sm font-medium
+          text-gray-200
+          bg-gray-800/50 
+          border border-gray-700
+          rounded-md 
+          hover:bg-gray-700/50 
+          hover:text-white
+          transition
+          disabled:opacity-40
+        "
+      >
+        {running ? "Deploying..." : "Deploy Strategy"}
+      </button>
+    </div>
   );
 }

@@ -20,6 +20,7 @@ export interface Run {
     logs: string[];
     botAddress?: string;
     botIndex?: number;
+    owner?: string; // optional owner id (e.g., wallet address) to mark runs as belonging to a user
 }
 
 export interface DB {

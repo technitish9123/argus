@@ -71,6 +71,9 @@ class RunManagerClass {
         // If simulateOnly, start immediately. If live, wait for funding then start.
         if (params.simulateOnly) {
             const env = { ...process.env, ...toEnv(params) };
+            // Ensure RUN_PARAMS is present as a raw JSON string env var if provided
+            const rp = params.RUN_PARAMS ?? params.runParams ?? params.run_params ?? params.run_params_string;
+            if (rp !== undefined) (env as any).RUN_PARAMS = typeof rp === "string" ? rp : JSON.stringify(rp);
             const p = spawn(cmd, ["tsx", scriptPath], { env });
             this.procs.set(run.id, p);
 
@@ -120,6 +123,9 @@ class RunManagerClass {
                         emitter.emit("status", { type: "status", status: run.status });
                         // spawn with BOT_PRIVATE_KEY in env so the script can use it
                         const env = { ...process.env, ...toEnv(params), BOT_PRIVATE_KEY: botKey };
+                        // Ensure RUN_PARAMS is present as a raw JSON string env var if provided
+                        const rp2 = params.RUN_PARAMS ?? params.runParams ?? params.run_params ?? params.run_params_string;
+                        if (rp2 !== undefined) (env as any).RUN_PARAMS = typeof rp2 === "string" ? rp2 : JSON.stringify(rp2);
                         const p = spawn(cmd, ["tsx", scriptPath], { env });
                         this.procs.set(run.id, p);
 

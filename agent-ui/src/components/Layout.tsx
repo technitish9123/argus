@@ -21,6 +21,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   useEffect(() => {
   const eth = window.ethereum as EIP1193Provider | undefined;
     if (!eth) return;
+    // initialize from localStorage so UI persists connected user across reloads
+    const existing = localStorage.getItem("userId");
+    if (existing) setAddress(existing);
     const handleAccounts = (accounts: string[]) => {
       setAddress(accounts && accounts.length ? accounts[0] : null);
     };
@@ -52,7 +55,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     if (!eth) return alert("No injected wallet found (MetaMask). Connect an RPC or use a browser wallet.");
     try {
       const accs = (await eth.request({ method: "eth_requestAccounts" })) as string[];
-      setAddress(accs[0] ?? null);
+  const addr = accs[0] ?? null;
+  setAddress(addr);
+  if (addr) localStorage.setItem("userId", addr);
       const c = (await eth.request({ method: "eth_chainId" })) as string;
       setChainId(c ?? null);
     } catch (e) {
@@ -63,6 +68,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const disconnect = () => {
     setAddress(null);
     // wallets don't support programmatic disconnect widely; we just clear local state
+    localStorage.removeItem("userId");
   };
 
   return (

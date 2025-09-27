@@ -1,3 +1,4 @@
+
 import express from "express";
 import { loadDB, saveDB } from "../services/storage";
 import { RunManager } from "../services/runManager";
@@ -46,11 +47,12 @@ router.post("/:id/kill", (req, res) => {
 
 // Create a new run (simulateOnly or live). Returns run id and botAddress if allocated for live runs.
 router.post("/", async (req, res) => {
-    const { strategyId, params } = req.body as { strategyId: string; params?: Record<string, any> };
+    const { strategyId, params, owner } = req.body as { strategyId: string; params?: Record<string, any>; owner?: string };
     const db = loadDB();
     const strategy = db.strategies.find((s) => s.id === strategyId);
     if (!strategy) return res.status(404).json({ error: "strategy not found" });
     const run = RunManager.startRun(strategy, params || {});
+    if (owner) run.owner = owner;
     // save DB with run inserted
     db.runs = db.runs || [];
     db.runs.push(run);
@@ -87,6 +89,25 @@ router.post("/:id/fund", async (req, res) => {
         console.error("dev fund error", e);
         res.status(500).json({ error: String(e) });
     }
+});
+
+
+// Start a stopped run (exited/error/killed) by re-invoking RunManager.startRun with the same params
+router.post("/:id/start", async (req, res) => {
+    const db = loadDB();
+    const run = db.runs.find((r) => r.id === req.params.id);
+    if (!run) return res.status(404).json({ error: "run not found" });
+    if (["running", "waiting_for_funds", "starting"].includes(run.status)) {
+        return res.status(400).json({ error: "run is already running or pending" });
+    }
+    const strategy = db.strategies.find((s) => s.id === run.strategyId);
+    if (!strategy) return res.status(404).json({ error: "strategy not found" });
+    // Start a new run with same params and owner
+    const newRun = RunManager.startRun(strategy, run.params);
+    newRun.owner = run.owner;
+    db.runs.push(newRun);
+    saveDB(db);
+    res.json({ id: newRun.id, status: newRun.status, botAddress: newRun.botAddress });
 });
 
 export default router;

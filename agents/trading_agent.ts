@@ -452,11 +452,39 @@ async function main() {
         buildInputs
     });
 
-    // ====== Interactive simulation runner ======
-    // Allow the user to specify how many "time steps" the agent should run.
-    // Usage: npx tsx agents/trading_agent.ts [STEPS]
-    const argSteps = Number(process.argv[2] ?? process.env.RUN_STEPS ?? 50);
-    const steps = Number.isFinite(argSteps) && argSteps > 0 ? Math.floor(argSteps) : 50;
+    // ====== Interactive simulation / UI-driven runner ======
+    // Accept run configuration from multiple sources so the UI/backend can
+    // control the agent behavior. Sources (priority):
+    // 1. process.env.RUN_PARAMS (JSON string)
+    // 2. process.argv[2] as JSON string or path to JSON file
+    // 3. process.argv[2] as a numeric STEPS value
+    // 4. process.env.RUN_STEPS
+    // 5. fallback default
+    // Supported runConfig fields: { steps, liveDurationSec, params }
+    const rawArg = process.env.RUN_PARAMS ?? process.argv[2];
+    let runConfig: { steps?: number; liveDurationSec?: number; params?: Partial<AgentParams> } = {};
+    if (rawArg) {
+        try {
+            const s = String(rawArg).trim();
+            if (s.startsWith('{')) {
+                runConfig = JSON.parse(s);
+            } else if (fs.existsSync(s)) {
+                // treat as a path to a JSON file
+                const txt = fs.readFileSync(s, 'utf8');
+                runConfig = JSON.parse(txt);
+            } else {
+                // numeric fallback
+                const maybeNum = Number(s);
+                if (Number.isFinite(maybeNum) && maybeNum > 0) runConfig.steps = Math.floor(maybeNum);
+            }
+        } catch (err) {
+            console.warn('[WARN] Failed to parse RUN_PARAMS/arg as JSON or file, falling back to defaults', err);
+        }
+    }
+
+    const defaultSteps = 50;
+    const envSteps = Number(process.env.RUN_STEPS ?? NaN);
+    const steps = runConfig.steps ?? (Number.isFinite(envSteps) && envSteps > 0 ? Math.floor(envSteps) : defaultSteps);
 
     // Start near the end of the series so indicators have history; pick a start index
     const minHistory = 60; // need some history for indicators
@@ -467,6 +495,19 @@ async function main() {
     let equityNow = 100_000;
     const initialEquity = equityNow;
     const actions: Array<any> = [];
+
+    // Merge UI-provided params (if present) with the demo defaults. This allows
+    // the backend/UI to control symbol, riskPct, indicators, etc.
+    const uiParams: Partial<AgentParams> = runConfig.params ?? {};
+    const demoParams: AgentParams = { symbol: 'ETH-USD', riskPct: 0.01, atrLen: 14, atrMult: 2, fast: 20, slow: 50, rsiLen: 14 };
+    const paramsToUse: AgentParams = { ...demoParams, ...uiParams };
+
+    // If a liveDurationSec was provided, the run will stop after that many seconds
+    // from the start of the simulation. This is useful for timing "how long an
+    // agent will be live" in demos.
+    const liveDurationSec = runConfig.liveDurationSec ?? (process.env.LIVE_DURATION_SEC ? Number(process.env.LIVE_DURATION_SEC) : undefined);
+    const startTime = Date.now();
+    console.log(`[SIM] Using params: ${JSON.stringify(paramsToUse)} steps=${steps} liveDurationSec=${liveDurationSec ?? 'n/a'}`);
 
     console.log(`[SIM] Starting simulation for ${steps} steps from index ${startIndex} (initial equity $${initialEquity})`);
 
@@ -483,7 +524,7 @@ async function main() {
         // Run the agent at this time-step
         const out = await run({
             series: slice,
-            params: { symbol: 'ETH-USD', riskPct: 0.01, atrLen: 14, atrMult: 2, fast: 20, slow: 50, rsiLen: 14 },
+            params: paramsToUse,
             broker: pb,
             equity: equityNow,
             log: (m) => console.log(`[AGENT ${i}] ${m}`)
@@ -509,10 +550,16 @@ async function main() {
 
         // small pause to feel like it's running when user watches (only in interactive terminals)
         if (process.stdout.isTTY) await new Promise((r) => setTimeout(r, 100));
+
+        // If liveDurationSec is set, check elapsed time and break when exceeded.
+        if (liveDurationSec && (Date.now() - startTime) / 1000 >= liveDurationSec) {
+            console.log(`[SIM] Reached liveDurationSec=${liveDurationSec}s, stopping run early.`);
+            break;
+        }
     }
 
     // Final summary
-    const finalUnits = await pb.getPositionUnits('ETH-USD');
+    const finalUnits = await pb.getPositionUnits(paramsToUse.symbol ?? 'ETH-USD');
     const finalPrice = ohlc.close[startIndex + steps - 1];
     const finalPositionValue = finalUnits * finalPrice;
     const finalEquity = equityNow;
@@ -524,6 +571,9 @@ async function main() {
     console.log(`Total actions executed: ${actions.length}`);
     console.log('Recent actions:');
     console.log(actions.slice(-10).map((a) => ({ step: a.step, side: a.intent.side, delta: a.intent.deltaUnits, price: a.intent.price })));
+
+    const elapsedMs = Date.now() - startTime;
+    console.log(`Agent live time: ${(elapsedMs / 1000).toFixed(2)}s`);
 
 }
 
