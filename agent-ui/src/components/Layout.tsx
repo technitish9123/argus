@@ -107,7 +107,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       {/* Footer */}
       <footer className="border-t border-gray-800 bg-gray-950/70 backdrop-blur mt-10">
         <div className="max-w-7xl mx-auto px-6 py-4 text-sm text-gray-400 flex justify-between">
-          <p>© {new Date().getFullYear()} DeFi Agent. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Argus. All rights reserved.</p>
           <p>Built for Web3 users 🚀</p>
         </div>
       </footer>

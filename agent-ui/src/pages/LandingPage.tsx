@@ -4,11 +4,14 @@ import Lottie from "lottie-react";
 import Tilt from "react-parallax-tilt";
 import robotAnim from "../assets/robot.json";
 
-// Logos (using <img /> so it works reliably)
+// Logos
 import AaveIcon from "../logos/aave.svg";
 import UniswapIcon from "../logos/uniswap.svg";
 import CurveIcon from "../logos/curve.svg";
 import CompoundIcon from "../logos/compound.svg";
+import RootstockIcon from "../logos/compound.svg";
+import FlowIcon from "../logos/compound.svg";
+import OneInchIcon from "../logos/compound.svg";
 
 export default function LandingPage() {
   const protocols = [
@@ -39,10 +42,7 @@ export default function LandingPage() {
   ];
 
   return (
-    <div
-      className="min-h-screen text-white flex flex-col relative overflow-hidden bg-gradient-to-b from-gray-950 via-gray-900 to-black"
-     
-    >
+    <div className="min-h-screen text-white flex flex-col relative overflow-hidden bg-gradient-to-b from-gray-950 via-gray-900 to-black">
       {/* Hero */}
       <section className="flex-1 flex flex-col md:flex-row items-center justify-center gap-12 px-6 py-20 relative z-10">
         <div className="text-center md:text-left max-w-2xl">
@@ -65,11 +65,10 @@ export default function LandingPage() {
           </h2>
           <p className="text-gray-300 mb-8">
             Build, test, and deploy autonomous DeFi agents. From liquidity
-            management to risk-adjusted strategies — powered by a modular
-            TypeScript + React stack.
+            management to risk-adjusted strategies — powered by a Quants.
           </p>
-          <button className="bg-gradient-to-r from-indigo-500 to-cyan-500 text-white px-6 py-3 rounded-xl font-semibold hover:scale-105 transition">
-            🚀 Get Started
+          <button className="bg-gradient-to-r from-indigo-900 to-cyan-900 text-white px-6 py-3 rounded-xl font-semibold hover:scale-105 transition">
+            Launch Playground
           </button>
         </div>
 
@@ -171,14 +170,35 @@ agent.deploy();`,
 
       {/* Why Section */}
       <section className="px-6 md:px-20 py-20 relative z-10 text-center">
-        <h3 className="text-3xl font-bold mb-8">Why DeFi Agents?</h3>
-        <p className="max-w-3xl mx-auto text-gray-300 text-lg">
-          Today, yield farming and liquidity provisioning require constant
-          monitoring, manual strategy updates, and risk management. <br />
-          <span className="text-cyan-400 font-semibold">DeFi Agents</span> automate
-          this process — deploying capital across protocols with AI-driven
-          decision-making and risk-adjusted execution.
-        </p>
+        <h3 className="text-3xl font-bold text-center mb-12">
+          Track-Specific Value
+        </h3>
+        <div className="grid md:grid-cols-3 gap-6 mt-12">
+          <div className="p-6 rounded-xl border border-white/10 bg-white/5">
+            <img src={RootstockIcon} alt="Rootstock" className="w-8 h-8 mx-auto mb-3" />
+            <h4 className="text-lg font-semibold text-cyan-400">Rootstock</h4>
+            <p className="text-sm text-gray-300">
+              Automating DeFi on Bitcoin — yield farming and lending for BTC
+              users via one-click agents.
+            </p>
+          </div>
+          <div className="p-6 rounded-xl border border-white/10 bg-white/5">
+            <img src={FlowIcon} alt="Flow" className="w-8 h-8 mx-auto mb-3" />
+            <h4 className="text-lg font-semibold text-cyan-400">Flow</h4>
+            <p className="text-sm text-gray-300">
+              First DSL for Flow Actions — composable DeFi strategies usable by
+              agents in games, DeFi, and social apps.
+            </p>
+          </div>
+          <div className="p-6 rounded-xl border border-white/10 bg-white/5">
+            <img src={OneInchIcon} alt="1inch" className="w-8 h-8 mx-auto mb-3" />
+            <h4 className="text-lg font-semibold text-cyan-400">1inch</h4>
+            <p className="text-sm text-gray-300">
+              Extend Limit Orders with advanced strategies like TWAP,
+              auto-hedging, and cross-chain arbitrage.
+            </p>
+          </div>
+        </div>
       </section>
 
       {/* How It Works Section */}
@@ -187,9 +207,9 @@ agent.deploy();`,
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 text-center">
           {[
             { step: "AI Agent", desc: "Learns market signals and strategy patterns." },
-            { step: "Strategy", desc: "Defines LP, lending, or arbitrage positions." },
-            { step: "Protocol", desc: "Executes across Aave, Uniswap, Curve, Compound." },
-            { step: "Yield", desc: "Optimizes returns with minimized risk." },
+            { step: "DSL Standard", desc: "Reusable, portable agent strategies across EVM & non-EVM." },
+            { step: "Protocol Execution", desc: "Agents interact with Aave, Uniswap, Rootstock, Flow." },
+            { step: "Yield Optimization", desc: "Capital deployed automatically with risk checks." },
           ].map((item, idx) => (
             <motion.div
               key={idx}
@@ -211,12 +231,15 @@ agent.deploy();`,
       <section className="px-6 md:px-20 py-20 relative z-10 text-center">
         <h3 className="text-3xl font-bold mb-8">Our Vision</h3>
         <p className="max-w-3xl mx-auto text-gray-300 text-lg">
-          We’re building the{" "}
-          <span className="text-indigo-400 font-semibold">AI Agent Layer</span> for
-          Web3 — enabling autonomous strategies, cross-chain liquidity deployment, and
+          Argus is building the{" "}
+          <span className="text-indigo-400 font-semibold">Agentic Standard</span> for
+          DeFi — enabling autonomous strategies, cross-chain liquidity deployment, and
           real-time risk monitoring. <br />
-          Think of it as{" "}
-          <span className="text-cyan-400">Autopilot for DeFi</span>.
+          For <span className="text-cyan-400">Rootstock</span>,
+          <span className="text-cyan-400"> Flow</span>, and
+          <span className="text-cyan-400"> 1inch</span>, Argus is more than a project —
+          it’s the growth layer onboarding the next wave of users through{" "}
+          <span className="text-cyan-400">autonomous agents</span>.
         </p>
       </section>
     </div>

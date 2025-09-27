@@ -110,42 +110,7 @@ export default function StrategiesPage() {
                         {s.metadata.risk}
                       </span>
                     </p>
-                    <p>
-                      <span className="text-gray-300">Created:</span>{" "}
-                      {new Date(s.createdAt).toLocaleDateString()}
-                    </p>
-                    <p>
-                      <span className="text-gray-300">Est. Yield:</span>{" "}
-                      ~12% APR
-                    </p>
-                    <p>
-                      <span className="text-gray-300">Drawdown:</span>{" "}
-                      ~8%
-                    </p>
-                    <p>
-                      <span className="text-gray-300">Sharpe Ratio:</span>{" "}
-                      1.4
-                    </p>
-                    <p>
-                      <span className="text-gray-300">Network:</span>{" "}
-                      Ethereum
-                    </p>
-                    <p>
-                      <span className="text-gray-300">Protocols:</span>{" "}
-                      Aave, Uniswap
-                    </p>
-                    <p>
-                      <span className="text-gray-300">Usage:</span>{" "}
-                      23 runs
-                    </p>
-                    <p>
-                      <span className="text-gray-300">Cost:</span>{" "}
-                      ~$0.50/tx
-                    </p>
-                    <p>
-                      <span className="text-gray-300">Last Updated:</span>{" "}
-                      {new Date(s.updatedAt).toLocaleDateString()}
-                    </p>
+                   
                   </div>
                 </div>
 

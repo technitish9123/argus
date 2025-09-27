@@ -49,7 +49,9 @@ const INITIAL_SUPPLY_RBTC = BigInt(process.env.INITIAL_SUPPLY_RBTC || 10_000_000
 
 const SOVRYN_POOL = getAddress(process.env.SOVRYN_POOL_ADDR || "0x0000000000000000000000000000000000000000");
 const RBTC = getAddress(process.env.RBTC_ADDR || "0x0000000000000000000000000000000000000000");
-const RUSDT = getAddress(process.env.RUSDT_ADDR || "0x0000000000000000000000000000000000000000");
+const wRBTC = getAddress(process.env.RBTC_ADDR || "0x967F8799aF07dF1534d48A95a5C9FEBE92c53AE0");
+
+const RUSDT = getAddress(process.env.RUSDT_ADDR || "0xef213441A85dF4d7ACbDaE0Cf78004e1E486bB96");
 const AMM_ROUTER = getAddress(process.env.AMM_ROUTER_ADDR || "0x0000000000000000000000000000000000000000");
 
 const ERC20_ABI = [
@@ -125,8 +127,8 @@ async function ensureAllowance(
 }
 
 async function main() {
-  const rpc = process.env.RPC_URL || "https://public-node.testnet.rsk.co";
-  const pk  = process.env.PRIVATE_KEY || "";
+  const rpc = process.env.RPC_URL || "http://127.0.0.1:8545";
+  const pk  = process.env.PRIVATE_KEY || "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
   if (!pk) throw new Error("Set PRIVATE_KEY");
   if (!rpc) throw new Error("Set RPC_URL");
 
@@ -138,15 +140,29 @@ async function main() {
   const rusdt = new Contract(RUSDT, ERC20_ABI, provider);
   // TODO: Add Sovryn pool and AMM router ABIs as needed
 
+  // Detect whether RBTC address is an ERC-20 or the native coin (RBTC):
+  let rbtcIsErc20 = true;
+  let curRbtcBal: bigint;
+  try {
+    // Try ERC-20 balanceOf; some RBTC addresses may be native coin (no balanceOf)
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    curRbtcBal = await rbtc.balanceOf(me);
+  } catch (err) {
+    // Not an ERC-20 (or call failed) — treat as native balance
+    rbtcIsErc20 = false;
+    curRbtcBal = await provider.getBalance(me);
+  }
+
   // Initial supply
   log(`== Initial supply ==`);
-  const curRbtcBal = await rbtc.balanceOf(me);
   if (curRbtcBal < INITIAL_SUPPLY_RBTC) {
     throw new Error("Insufficient RBTC balance for initial supply");
   }
   // Supply RBTC to Sovryn pool using the supply schema
   const dry = process.env.DEBUG_DRY_RUN === "1";
-  if (!dry) {
+  // Native coins (RBTC) do not need ERC-20 approvals
+  if (!dry && rbtcIsErc20) {
     await ensureAllowance(approveSchema, RBTC, me, SOVRYN_POOL, INITIAL_SUPPLY_RBTC, rpc, pk, "RBTC", 18, rbtc);
   }
   log(`→ supplying initial RBTC (${INITIAL_SUPPLY_RBTC.toString()}) to pool ${SOVRYN_POOL} (dry=${dry})`);

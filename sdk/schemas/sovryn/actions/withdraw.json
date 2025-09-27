@@ -2,25 +2,18 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "sovryn.withdraw",
   "type": "object",
-  "additionalProperties": false,
   "properties": {
     "protocol": { "const": "sovryn" },
-    "contract": { "const": "lendingPool" },
-    "method":   { "const": "withdraw" },
+    "contract": { "const": "iRBTC" },
+    "method":   { "const": "redeem" },
     "params": {
       "type": "object",
-      "required": ["asset", "amount", "to"],
+      "required": ["amount"],
       "properties": {
-        "asset": { "type": "string", "pattern": "^0x[a-fA-F0-9]{40}$" },
-        "amount": { "type": "string", "pattern": "^[0-9]+$" },
-        "to": { "type": "string", "pattern": "^0x[a-fA-F0-9]{40}$" }
+        "amount": { "type": "string", "pattern": "^[0-9]+$" }
       }
-    },
-    "chainId": { "type": "integer", "minimum": 1 }
+    }
   },
-  "required": ["protocol", "contract", "method", "params", "chainId"],
-  "x-abi": "function withdraw(address asset, uint256 amount, address to) returns (uint256)",
-  "x-credits": [
-    { "amountKey": "amount", "tokenParam": "asset" }
-  ]
+  "required": ["protocol","contract","method","params"],
+  "x-abi": "function redeem(uint256 tokenAmount) external returns (uint256)"
 }

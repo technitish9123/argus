@@ -2,25 +2,23 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "sovryn.supply",
   "type": "object",
-  "additionalProperties": false,
   "properties": {
     "protocol": { "const": "sovryn" },
-    "contract": { "const": "lendingPool" },
-    "method":   { "const": "deposit" },
+    "contract": { "const": "iRBTC" },
+    "method":   { "const": "mint" },
     "params": {
       "type": "object",
-      "required": ["asset", "amount", "onBehalfOf"],
+      "required": ["amount"],
       "properties": {
-        "asset":      { "type": "string", "pattern": "^0x[a-fA-F0-9]{40}$" },
-        "amount":     { "type": "string", "pattern": "^[0-9]+$" },
-        "onBehalfOf": { "type": "string", "pattern": "^0x[a-fA-F0-9]{40}$" }
+        "amount": { "type": "string", "pattern": "^[0-9]+$" }
       }
     },
     "chainId": { "type": "integer", "minimum": 1 }
   },
-  "required": ["protocol", "contract", "method", "params", "chainId"],
-  "x-abi": "function deposit(address asset, uint256 amount, address onBehalfOf, uint16 referralCode)",
-  "x-credit": [
-    { "amountKey": "amount", "tokenParam": "asset" }
+  "required": ["protocol","contract","method","params"],
+  "x-abi": "function mint(uint256 amount) external payable",
+  "x-spenderRole": "iRBTC",
+  "x-debits": [
+    { "amountKey": "amount", "tokenParam": "WRBTC" }
   ]
 }

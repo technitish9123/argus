@@ -1,9 +1,23 @@
 {
   "protocol": "sovryn",
-  "version": "2",
+  "version": "1",
+  "chainId": 30,
+  "description": "Sovryn protocol metadata and default role addresses (Rootstock)",
   "roles": {
-    "vault": {
-      "1": "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
+    "WRBTC": {
+      "30": "0x542fDA317318eBF1d3DEAf76E0b632741A7e677d"
+    },
+    "rUSDT": {
+      "30": "0xef213441A85dF4d7ACbDaE0Cf78004e1E486bB96"
+    },
+    "iRBTC": {
+      "30": "0xa9DcDC63eaBb8a2b6f39D7fF9429d88340044a7A"
+    },
+    "iUSDT": {
+      "30": "0x849C47f9C259E9D62F289BF1b2729039698D8387"
+    },
+    "ammRouter": {
+      "30": "0x98aCE08D2b759a265ae326F010496bcD63C15afc"
     }
   }
 }
