@@ -1,139 +1,147 @@
-# Agent Protocol DSL
 
-A TypeScript-based DSL for agent protocol flows, including schema-driven intent execution and LLM-powered planning.
 
-## Project Structure
+# 🛡️ Argus — DeFi Agent Protocol DSL
 
-- `src/` — Core source code
-- `examples/` — Usage examples and demos
-- `schemas/` — JSON schemas for supported protocols/actions
-- `spec/` — DSL specification
-- `tests/` — Unit and integration tests
-- `docs/` — Documentation and guides
-- `.github/` — GitHub workflows and instructions
-
-# Agent Protocol DSL
-
-A TypeScript-based DSL for agent protocol flows, including schema-driven intent execution and LLM-powered planning.
+**Argus** is an open-source framework for building, testing, and deploying **autonomous DeFi agents**.
+It combines a **DSL (Domain-Specific Language)**, **runtime SDK**, and **management backend** to make DeFi strategies composable, verifiable, and easy to run.
 
 ---
 
-## Folder Structure
+## ✨ Why Argus?
 
-```text
-src/         # Core source code (business logic, types, validators, execution)
-examples/    # Usage examples and demos
-schemas/     # JSON schemas for supported protocols/actions
-spec/        # DSL specification
-tests/       # Unit and integration tests
-docs/        # Documentation and guides
-.github/     # GitHub workflows and instructions
-.vscode/     # VSCode workspace settings
-scripts/     # Utility scripts
+DeFi today is fragmented:
+
+* Developers must wire together ABIs, SDKs, and brittle scripts.
+* Strategies are opaque — hard to reason about or reuse.
+* Running agents at scale requires custom infra.
+
+**Argus solves this** with three layers:
+
+1. **SDK (`@apdsl/agent-kit`)**
+
+   * A strongly typed DSL to describe intents (`borrow`, `swap`, `stake`, …).
+   * Compiles intents into IR → onchain actions.
+   * Comes with built-in validators, ABI registry, and TA signals.
+
+2. **Agents**
+
+   * Example strategies like `leverage_loop`, `lido-stake`, `trading_agent`.
+   * Parametrizable & reproducible — one agent, many variations.
+
+3. **Backend + UI**
+
+   * Run Manager: create, fund, and monitor agent runs.
+   * JSON-backed persistence (lightweight, no infra lock-in).
+   * Sleek React dashboard to deploy, manage, and fund agents in real-time.
+
+---
+
+## 🚀 Features
+
+* 🧑‍💻 **Developer-first SDK** — build new agents with TypeScript.
+* 🔗 **Protocol integrations** — Aave, Uniswap, Lido, and more (via ABI registry).
+* ⚡ **Streaming logs** — SSE-powered live run monitoring.
+* 🛠️ **Local-first** — works on `localhost` with minimal setup.
+* 🔒 **Composable & safe** — strong schema validation of strategies.
+* 🎨 **Clean UI** — glassy dashboard to view & deploy your agents.
+
+---
+
+## 📂 Project Structure
+
+```
+agent-protocol-dsl/
+├── sdk/               # Core SDK (@apdsl/agent-kit)
+│   ├── src/           # DSL compiler, runtime, signals, utils
+│   ├── spec/          # JSON Schemas for DSL
+│   └── tests/         # Unit & integration tests
+│
+├── agents/            # Example agents built on SDK
+│   ├── leverage_loop.ts
+│   ├── trading_agent.ts
+│   ├── lido-stake.ts
+│   └── ...
+│
+├── backend/           # Run Manager API
+│   ├── src/           # Routes, services, storage
+│   └── package.json
+│
+├── frontend/          # React playground dashboard
+│   ├── src/pages      # Dashboard, Deploy, Strategies
+│   └── src/components # Forms, Logs, Controls
+│
+└── package.json       # Monorepo root
 ```
 
 ---
 
-## Getting Started
+## 🏗️ Getting Started
 
-1. **Install dependencies:**
-   ```sh
-   pnpm install
-   ```
-2. **Build the project:**
-   ```sh
-   pnpm build
-   ```
-3. **Run examples:**
-   ```sh
-   pnpm tsx examples/lido-stake-llm.ts
-   ```
+### 1. Clone & Install
 
----
-
-## Example: Uniswap V3 exactInputSingle
-
-```ts
-// This is a demo script for executing a Uniswap V3 swap using a schema and inputs.
-// Business logic is unchanged; only comments and structure are improved.
-
-async function main() {
-  const rpc = process.env.RPC_URL!;
-  const pk = process.env.PRIVATE_KEY!;
-  if (!rpc || !pk) throw new Error("Set RPC_URL and PRIVATE_KEY");
-
-  // Load schema file and convert to file URL
-  const schemaFs = path.join(
-    process.cwd(),
-    "schemas/uniswap_v3/actions/exactInputSingle.json"
-  );
-  const schemaUrl = pathToFileURL(schemaFs).href;
-
-  // Prepare swap inputs
-  const now = Math.floor(Date.now() / 1000);
-  const inputs = {
-    tokenIn: getAddress("0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"), // USDC
-    tokenOut: getAddress("0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"), // WETH
-    fee: 3000,
-    recipient: getAddress("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"),
-    deadline: now + 1200,
-    amountIn: "5000000", // 5 USDC (6 dp)
-    amountOutMinimum: "0", // demo only; add slippage guard in prod
-    sqrtPriceLimitX96: "0",
-  };
-
-  // Execute the swap (simulateOnly: false)
-  const result = await execFromFile(schemaUrl, inputs, rpc, pk, false);
-  console.log("Tx result:", result);
-}
-
-main().catch((e) => {
-  console.error(e);
-  process.exit(1);
-});
+```bash
+git clone https://github.com/your-org/argus
+cd argus
+pnpm install
 ```
 
-> You can run in **simulate mode** by passing `true` as the last argument:
-> `await execFromFile(schemaUrl, inputs, rpc, pk, true)`
+### 2. Run Backend
 
----
-
-## Environment Variables
-
-- `RPC_URL` — Ethereum RPC endpoint (Infura/Alchemy/local fork)
-- `PRIVATE_KEY` — Private key for the signer (use test keys on forks)
-
----
-
-## TypeScript / ESM Notes
-
-This package targets **NodeNext ESM**. In your `tsconfig.json`:
-
-```json
-{
-  "compilerOptions": {
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "target": "ES2022",
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true
-  }
-}
+```bash
+cd backend
+pnpm dev
 ```
 
-- When using relative imports in your own source, include the **`.js`** extension (NodeNext rule).
-- JSON imports use: `import x from "file.json" with { type: "json" }`.
+### 3. Run Frontend
+
+```bash
+cd frontend
+pnpm dev
+```
+
+Visit 👉 `http://localhost:5173`
+
+### 4. Try Example Agent
+
+```bash
+npx tsx agents/leverage_loop.ts
+```
 
 ---
 
-## Contributing
+## 🖥️ UI Preview
 
-- Fork the repo, create a branch, and submit PRs.
-- See `docs/ROADMAP.md` for future plans.
+* **Dashboard** — see all your deployed agents, runs, and statuses.
+* **Strategies Page** — browse available DeFi strategies with risk, yield, and cost info.
+* **Deploy Page** — configure params, fund, and launch an agent.
 
 ---
 
-## License
+## 🛠️ Tech Stack
 
-MIT
+* **TypeScript** — SDK + agents
+* **Express** — backend API
+* **React + Tailwind** — frontend dashboard
+* **Flow / EVM** — blockchain networks (extensible)
+* **SSE** — live run streaming
+
+---
+
+## 🔮 Roadmap
+
+* [ ] Cross-chain intent support
+* [ ] Real yield & risk analytics
+* [ ] Guardian-controlled agent wallets
+* [ ] Agent marketplace (share & fork strategies)
+
+---
+
+## 🤝 Contributing
+
+Pull requests are welcome! Please open an issue first to discuss major changes.
+
+---
+
+## 📜 License
+
+MIT © 2025 Argus contributors

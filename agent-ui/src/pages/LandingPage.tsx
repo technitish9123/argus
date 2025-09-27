@@ -96,7 +96,7 @@ export default function LandingPage() {
             <span className="text-xs text-gray-400">example.ts</span>
             <button
               onClick={() =>
-                navigator.clipboard.writeText(`import { Agent } from "defi-agent";
+                navigator.clipboard.writeText(`import { Agent } from "@apdsl/agent-kit";
 
 const agent = new Agent({
   name: "Yield Farmer",
@@ -119,7 +119,7 @@ agent.deploy();`)
             <code>
               <Typewriter
                 words={[
-                  `import { Agent } from "defi-agent";
+                  `import { Agent } from "@apdsl/agent-kit";
 
 const agent = new Agent({
   name: "Yield Farmer",

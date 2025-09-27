@@ -81,6 +81,7 @@ class RunManagerClass {
                 const line = buf.toString();
                 run.logs.push(line);
                 emitter.emit("log", { type: "log", line });
+                console.log(line); // Print log to terminal
                 saveDB(db);
             };
 
@@ -133,6 +134,7 @@ class RunManagerClass {
                             const line = buf.toString();
                             run.logs.push(line);
                             emitter.emit("log", { type: "log", line });
+                            console.log(line); // Print log to terminal for live runs
                             saveDB(db);
                         };
 
