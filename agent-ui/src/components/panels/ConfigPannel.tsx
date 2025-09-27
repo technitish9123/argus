@@ -11,6 +11,8 @@ export default function ConfigPanel({ selectedNode }) {
         <option>DAI</option>
         <option>USDC</option>
         <option>USDT</option>
+        <option>WBTC</option>
+        <option>stETH</option>
       </select>
 
       <label className="block mb-2 text-sm">Amount</label>

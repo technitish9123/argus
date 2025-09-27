@@ -134,7 +134,7 @@ console.log("USDC reserve data:", usdcRes);
 
 
 
-  const aWethAddr = wethRes.aTokenAddress;
+  const aWethAddr = "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2";
   const vdUsdcAddr = usdcRes.variableDebtTokenAddress;
 
   console.log("aWETH:", aWethAddr);
@@ -276,7 +276,6 @@ async function main() {
   try {
     const poolIface = new ethers.Interface(["function supply(address,uint256,address,uint16)"]);
     const previewData = poolIface.encodeFunctionData("supply", [WETH, INITIAL_SUPPLY_WETH.toString(), me, 0]);
-    console.log("preview aave supply calldata (len):", previewData.length, previewData.slice(0, 200));
   } catch (err) {
     console.warn("could not preview supply calldata:", err);
   }

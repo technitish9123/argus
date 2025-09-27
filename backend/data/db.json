@@ -5606,6 +5606,60 @@
         "Error: transaction execution reverted (action=\"sendTransaction\", data=null, reason=null, invocation=null, revert=null, transaction={ \"data\": \"\", \"from\": \"0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266\", \"to\": \"0x87870Bca3F3fD6335C3F4ce8392D69350B4fA4E2\" }, receipt={ \"_type\": \"TransactionReceipt\", \"blobGasPrice\": \"1\", \"blobGasUsed\": null, \"blockHash\": \"0x38102e7bb0f72ee8dcd98d0b5a179473c8c92bed20d9123bf6d7ad9a5cd82e6c\", \"blockNumber\": 23452421, \"contractAddress\": null, \"cumulativeGasUsed\": \"273875\", \"from\": \"0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266\", \"gasPrice\": \"1000088709\", \"gasUsed\": \"273875\", \"hash\": \"0x53d045498b9aa34c408696a7748433eb9848d49fb9cf366afe458b358cbdbac7\", \"index\": 0, \"logs\": [  ], \"logsBloom\": \"0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\", \"root\": null, \"status\": 0, \"to\": \"0x87870Bca3F3fD6335C3F4ce8392D69350B4fA4E2\" }, code=CALL_EXCEPTION, version=6.15.0)\n    at makeError (/Users/nitish/Desktop/tes/agent-protocol-dsl/node_modules/.pnpm/ethers@6.15.0/node_modules/ethers/src.ts/utils/errors.ts:698:21)\n    at assert (/Users/nitish/Desktop/tes/agent-protocol-dsl/node_modules/.pnpm/ethers@6.15.0/node_modules/ethers/src.ts/utils/errors.ts:719:25)\n    at checkReceipt (/Users/nitish/Desktop/tes/agent-protocol-dsl/node_modules/.pnpm/ethers@6.15.0/node_modules/ethers/src.ts/providers/provider.ts:1607:19)\n    at TransactionResponse.wait (/Users/nitish/Desktop/tes/agent-protocol-dsl/node_modules/.pnpm/ethers@6.15.0/node_modules/ethers/src.ts/providers/provider.ts:1624:24)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async execFromFile (/Users/nitish/Desktop/tes/agent-protocol-dsl/sdk/dist/exec/executor.js:121:18)\n    at async main (/Users/nitish/Desktop/tes/agent-protocol-dsl/agents/leverage_loop.ts:302:7) {\n  code: 'CALL_EXCEPTION',\n  action: 'sendTransaction',\n  data: null,\n  reason: null,\n  invocation: null,\n  revert: null,\n  transaction: {\n    to: '0x87870Bca3F3fD6335C3F4ce8392D69350B4fA4E2',\n    from: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266',\n    data: ''\n  },\n  receipt: TransactionReceipt {\n    provider: JsonRpcProvider {},\n    to: '0x87870Bca3F3fD6335C3F4ce8392D69350B4fA4E2',\n    from: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266',\n    contractAddress: null,\n    hash: '0x53d045498b9aa34c408696a7748433eb9848d49fb9cf366afe458b358cbdbac7',\n    index: 0,\n    blockHash: '0x38102e7bb0f72ee8dcd98d0b5a179473c8c92bed20d9123bf6d7ad9a5cd82e6c',\n    blockNumber: 23452421,\n    logsBloom: '0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000',\n    gasUsed: 273875n,\n    blobGasUsed: null,\n    cumulativeGasUsed: 273875n,\n    gasPrice: 1000088709n,\n    blobGasPrice: 1n,\n    type: 2,\n    status: 0,\n    root: undefined\n  },\n  shortMessage: 'transaction execution reverted'\n}\n"
       ],
       "finishedAt": 1758963228059
+    },
+    {
+      "id": "2f309c6f-aa84-49aa-a882-0e3a5fb648b1",
+      "strategyId": "ee84f827-0e95-4f94-9a2b-497f559db5ef",
+      "params": {
+        "leverage": 3,
+        "iterations": 3,
+        "RUN_PARAMS": "{\"steps\":50,\"params\":{\"leverage\":3,\"iterations\":3}}",
+        "simulateOnly": true
+      },
+      "status": "exited",
+      "startedAt": 1758963939875,
+      "logs": [
+        "[agent] == Initial supply ==\n",
+        "[agent] insufficient WETH balance (0.0), wrapping 0.1 ETH -> WETH\n",
+        "[agent] balances before supply — WETH: 0.1, USDC: 0.0\n",
+        "preview aave supply calldata (len): 266 0x617ba037000000000000000000000000c02aaa39b223fe8d0a0e5c4f27ead9083c756cc2000000000000000000000000000000000000000000000000016345785d8a0000000000000000000000000000f39fd6e51aad88f6f4ce6ab8827279cfffb922\n",
+        "[exec] schema: file:///Users/nitish/Desktop/tes/agent-protocol-dsl/sdk/schemas/aave_v3/actions/supply.json\n",
+        "[exec] rpc: http://127.0.0.1:8545 simulateOnly: false\n[exec] rawInputs: {\n  asset: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',\n  amount: '100000000000000000',\n  onBehalfOf: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266',\n  referralCode: 0\n}\n",
+        "[exec] simulated_amountOut: 0\n",
+        "[exec] sending transaction to: 0x87870Bca3F3fD6335C3F4ce8392D69350B4fA4E2 method: supply\n",
+        "[exec] tx sent: 0x92e925bb4150bd659146b5fa96fa29a1dcefba904a86a3c5c6dd41c0069ae0bd waiting for receipt...\n",
+        "[exec] txReceipt: {\n  hash: '0x92e925bb4150bd659146b5fa96fa29a1dcefba904a86a3c5c6dd41c0069ae0bd',\n  status: 1,\n  gasUsed: '141454',\n  logs: 5\n}\n",
+        "[agent] balances after  supply — WETH: 0.0, USDC: 0.0\n",
+        "[agent] == Loop 1/1 ==\n",
+        "[agent] borrow → 25.0 USDC\n",
+        "[exec] schema: file:///Users/nitish/Desktop/tes/agent-protocol-dsl/sdk/schemas/aave_v3/actions/borrow.json\n",
+        "[exec] rpc: http://127.0.0.1:8545 simulateOnly: false\n[exec] rawInputs: {\n  asset: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',\n  amount: '25000000',\n  interestRateMode: 2,\n  referralCode: 0,\n  onBehalfOf: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'\n}\n",
+        "[exec] simulated_amountOut: 0\n[exec] sending transaction to: 0x87870Bca3F3fD6335C3F4ce8392D69350B4fA4E2 method: borrow\n",
+        "[exec] tx sent: 0x07855511e53bc39c5f2dee1662ea7942410aec1e5ae403f512e61fd12b3d65d1 waiting for receipt...\n",
+        "[exec] txReceipt: {\n  hash: '0x07855511e53bc39c5f2dee1662ea7942410aec1e5ae403f512e61fd12b3d65d1',\n  status: 1,\n  gasUsed: '274361',\n  logs: 5\n}\n",
+        "[agent] USDC change after borrow: +25.0 USDC\n",
+        "[exec] schema: file:///Users/nitish/Desktop/tes/agent-protocol-dsl/sdk/schemas/uniswap_v3/actions/exactInputSingle.json\n",
+        "[exec] rpc: http://127.0.0.1:8545 simulateOnly: false\n[exec] rawInputs: {\n  contract: '0xE592427A0AEce92De3Edee1F18E0157C05861564',\n  tokenIn: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',\n  tokenOut: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',\n  fee: 3000,\n  recipient: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266',\n  deadline: 1758965141,\n  amountIn: '25000000',\n  amountOutMinimum: '0',\n  sqrtPriceLimitX96: '0'\n}\n",
+        "[exec] sending transaction to: 0xE592427A0AEce92De3Edee1F18E0157C05861564 method: exactInputSingle\n",
+        "[exec] tx sent: 0x64c35290e796f8f4a541d81a0faa3238c441db86b8a4d6087186b7042c0224b0 waiting for receipt...\n",
+        "[exec] txReceipt: {\n  hash: '0x64c35290e796f8f4a541d81a0faa3238c441db86b8a4d6087186b7042c0224b0',\n  status: 1,\n  gasUsed: '130356',\n  logs: 3\n}\n",
+        "[agent] swap USDC->WETH received ≈ 0.006197610639708359 WETH\n",
+        "[exec] schema: file:///Users/nitish/Desktop/tes/agent-protocol-dsl/sdk/schemas/aave_v3/actions/supply.json\n",
+        "[exec] rpc: http://127.0.0.1:8545 simulateOnly: false\n[exec] rawInputs: {\n  asset: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',\n  amount: '6197610639708359',\n  onBehalfOf: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266',\n  referralCode: 0\n}\n",
+        "[exec] simulated_amountOut: 0\n",
+        "[exec] sending transaction to: 0x87870Bca3F3fD6335C3F4ce8392D69350B4fA4E2 method: supply\n",
+        "[exec] tx sent: 0xb21489e5a61b63fc9eee2102c5ce4ad363807f17cf1a83fe1b1e1a5362b43109 waiting for receipt...\n",
+        "[exec] txReceipt: {\n  hash: '0xb21489e5a61b63fc9eee2102c5ce4ad363807f17cf1a83fe1b1e1a5362b43109',\n  status: 1,\n  gasUsed: '141466',\n  logs: 5\n}\n",
+        "[agent] re-supplied 0.006197610639708359 WETH\n",
+        "\n== Final balances ==\n",
+        "WETH: 0.0 | USDC: 0.0\n✅ leverage loop complete (note: debt increased; unwind not included in this demo).\n",
+        "WETH reserve data: Result(13) [\n  7237005577332262213973186942896404434209959786468055790956074122879766896498n,\n  1053291373607904337234209192n,\n  15594733709870241615077288n,\n  1081871036634036997895958606n,\n  22770484908611609139877553n,\n  0n,\n  '0x0000000000000000000000000000000068D7a8d2',\n  '0x0000000000000000000000000000000000000000',\n  '0x4d5F47FA6A74757f35C14fD3a6Ef8E3C9BC514E8',\n  '0x102633152313C81cD80419b6EcF66d14Ad68949A',\n  83656728680299305960653383750962253822n,\n  192564772370340612235358991851645566459n,\n  39462600924397230442n\n]\n",
+        "USDC reserve data: Result(13) [\n  7237005577332262213973186574461598858100085731864983988484424756767133015372n,\n  1146295658700837020476680902n,\n  38758624235549756397537094n,\n  1194828105304467890627257433n,\n  55160181507744322298612376n,\n  0n,\n  '0x0000000000000000000000000000000068D7a8d2',\n  '0x0000000000000000000000000000000000000003',\n  '0x98C23E9d8f34FEFb1B7BD6a91B7FF122F4e16F5c',\n  '0x102633152313C81cD80419b6EcF66d14Ad68949A',\n  65747387485826138533815408519018565636n,\n  192564772370340612235358991851645566459n,\n  129088705486n\n]\naWETH: 0x0000000000000000000000000000000068D7a8d2\nvdUSDC: 0x98C23E9d8f34FEFb1B7BD6a91B7FF122F4e16F5c\n",
+        "aWETH has code? false\n",
+        "vdUSDC has code? true\n",
+        "aWETH contract does not exist at 0x0000000000000000000000000000000068D7a8d2 - skipping live monitor.\n"
+      ],
+      "finishedAt": 1758963944354
     }
   ]
 }

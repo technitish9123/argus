@@ -16,7 +16,7 @@ import FloatingControls from "../components/FloatingControls";
 
 const nodeTypes = { custom: CustomNode };
 
-const tokenList = ["ETH", "DAI", "USDC", "USDT"];
+const tokenList = ["ETH", "DAI", "USDC", "USDT", "stETH"];
 
 export default function PlaygroundPage() {
   const [nodes, setNodes, onNodesChange] = useNodesState<Node[]>([
