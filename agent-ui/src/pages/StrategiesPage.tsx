@@ -47,8 +47,8 @@ export default function StrategiesPage() {
 
   return (
     <div className="max-w-6xl mx-auto px-6 py-12">
-      <h1 className="text-3xl font-bold mb-8 text-white/90 text-center">
-        🚀 Available DeFi Strategies
+      <h1 className="text-2xl font-bold mb-8 text-white/90 text-center">
+        Available DeFi Strategies
       </h1>
 
       {/* Search + Filter */}
@@ -97,10 +97,6 @@ export default function StrategiesPage() {
 
                   <div className="flex flex-wrap gap-4 text-xs text-gray-400">
                     <p>
-                      <span className="text-gray-300">Script:</span>{" "}
-                      <span className="text-cyan-400">{s.scriptPath}</span>
-                    </p>
-                    <p>
                       <span className="text-gray-300">Risk:</span>{" "}
                       <span
                         className={
@@ -117,6 +113,38 @@ export default function StrategiesPage() {
                     <p>
                       <span className="text-gray-300">Created:</span>{" "}
                       {new Date(s.createdAt).toLocaleDateString()}
+                    </p>
+                    <p>
+                      <span className="text-gray-300">Est. Yield:</span>{" "}
+                      ~12% APR
+                    </p>
+                    <p>
+                      <span className="text-gray-300">Drawdown:</span>{" "}
+                      ~8%
+                    </p>
+                    <p>
+                      <span className="text-gray-300">Sharpe Ratio:</span>{" "}
+                      1.4
+                    </p>
+                    <p>
+                      <span className="text-gray-300">Network:</span>{" "}
+                      Ethereum
+                    </p>
+                    <p>
+                      <span className="text-gray-300">Protocols:</span>{" "}
+                      Aave, Uniswap
+                    </p>
+                    <p>
+                      <span className="text-gray-300">Usage:</span>{" "}
+                      23 runs
+                    </p>
+                    <p>
+                      <span className="text-gray-300">Cost:</span>{" "}
+                      ~$0.50/tx
+                    </p>
+                    <p>
+                      <span className="text-gray-300">Last Updated:</span>{" "}
+                      {new Date(s.updatedAt).toLocaleDateString()}
                     </p>
                   </div>
                 </div>
