@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "sovryn.borrow",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "protocol": { "const": "sovryn" },
+    "contract": { "const": "lendingPool" },
+    "method":   { "const": "borrow" },
+    "params": {
+      "type": "object",
+      "required": ["asset", "amount", "onBehalfOf"],
+      "properties": {
+        "asset":      { "type": "string", "pattern": "^0x[a-fA-F0-9]{40}$" },
+        "amount":     { "type": "string", "pattern": "^[0-9]+$" },
+        "onBehalfOf": { "type": "string", "pattern": "^0x[a-fA-F0-9]{40}$" }
+      }
+    },
+    "chainId": { "type": "integer", "minimum": 1 }
+  },
+  "required": ["protocol", "contract", "method", "params", "chainId"],
+  "x-abi": "function borrow(address asset, uint256 amount, address onBehalfOf) returns (uint256)",
+  "x-spenderRole": "lendingPool",
+  "x-debits": [
+    { "amountKey": "amount", "tokenParam": "asset" }
+  ]
+}

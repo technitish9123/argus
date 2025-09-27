@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "sovryn.swap",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "protocol": { "const": "sovryn" },
+    "contract": { "const": "ammRouter" },
+    "method":   { "const": "swapExactTokensForTokens" },
+    "params": {
+      "type": "object",
+      "required": ["amountIn", "amountOutMin", "path", "to", "deadline"],
+      "properties": {
+        "amountIn": { "type": "string", "pattern": "^[0-9]+$" },
+        "amountOutMin": { "type": "string", "pattern": "^[0-9]+$" },
+        "path": { "type": "array", "items": { "type": "string", "pattern": "^0x[a-fA-F0-9]{40}$" }, "minItems": 2 },
+        "to": { "type": "string", "pattern": "^0x[a-fA-F0-9]{40}$" },
+        "deadline": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "chainId": { "type": "integer", "minimum": 1 }
+  },
+  "required": ["protocol", "contract", "method", "params", "chainId"],
+  "x-abi": "function swapExactTokensForTokens(uint256 amountIn, uint256 amountOutMin, address[] calldata path, address to, uint256 deadline) returns (uint256[] memory amounts)",
+  "x-spenderRole": "ammRouter",
+  "x-debits": [
+    { "amountKey": "amountIn", "tokenParam": "path[0]" }
+  ],
+  "x-credits": [
+    { "amountKey": "amountOutMin", "tokenParam": "path[-1]" }
+  ]
+}
