@@ -21,7 +21,7 @@
 // Otherwise, use the correct relative path in your repo.
 import path from "node:path";
 import { pathToFileURL } from "node:url";
-import { runAgentAction } from "@apdsl/agent-kit";
+import { runAgentAction, execFromFile } from "@apdsl/agent-kit";
 import type { OHLCV, TriSignal, PositionSizer, PositionContext } from "../signals";
 import { sma, rsi, macd, atr, ema, crossOverSignal, rsiSignal, meanRevSignal, ensemble } from "../signals";
 
@@ -364,17 +364,13 @@ export class OnchainBroker implements BrokerAdapter {
         console.log(`[OnchainBroker] executing schema=${this.schemaPath} inputs=${JSON.stringify(inputs)}`);
 
         try {
-            // const result = await runAgentAction({
-            //     schemaPath: this.schemaPath,
-            //     inputs,
-            //     rpcUrl: this.rpcUrl,
-            //     privateKey: this.privateKey,
-            //     simulateOnly: this.simulateOnly
-            // });
+            // Use execFromFile directly (accepts flattened inputs like other examples)
+            const result = await execFromFile(this.schemaPath, inputs, this.rpcUrl, this.privateKey, this.simulateOnly);
 
             // runAgentAction/execFromFile already logs simulation and tx details.
-            // Provide a concise result for callers.
-            const txId = (result as any).txHash ?? (result as any).simulated_amountOut ?? "no-tx";
+            // Provide a concise result for callers. If result is missing, fall
+            // back to a sensible simulated id to avoid throwing.
+            const txId = (result as any)?.txHash ?? (result as any)?.simulated_amountOut ?? (result as any)?.txId ?? "no-tx";
             console.log(`[OnchainBroker] executed tx=${txId}`);
             return { txId };
         } catch (err) {
@@ -387,7 +383,7 @@ export class OnchainBroker implements BrokerAdapter {
 //////////////////////////////
 // Example usage (if you want local test)
 //
-import { loadCSV } from '../utils/load'; // parse to OHLCV
+import { loadCSV } from '../sdk/utils/load'; // parse to OHLCV
 import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
@@ -408,53 +404,125 @@ if (!fs.existsSync(csvPath)) {
     }
 }
 
-const ohlc = await loadCSV(csvPath);
+async function main() {
+    const ohlc = await loadCSV(csvPath);
 
-// --- OnchainBroker setup for real Uniswap swap ---
-const UNISWAP_ROUTER = '0xE592427A0AEce92De3Edee1F18E0157C05861564';
-const WETH = '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2';
-const USDC = '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48';
-const FEE_TIER = 3000;
-const recipient = process.env.AGENT_RECIPIENT || '0x' + 'ac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80'.slice(-40); // default Anvil address
+    // --- OnchainBroker setup for real Uniswap swap ---
+    const UNISWAP_ROUTER = '0xE592427A0AEce92De3Edee1F18E0157C05861564';
+    const WETH = '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2';
+    const USDC = '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48';
+    const FEE_TIER = 3000;
+    const recipient = process.env.AGENT_RECIPIENT || '0x' + 'ac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80'.slice(-40); // default Anvil address
 
-const schemaPath = fp(path.join(rootDir, 'schemas/uniswap_v3/actions/exactInputSingle.json'));
+    const schemaPath = fp(path.join(rootDir, 'sdk', 'schemas', 'uniswap_v3', 'actions', 'exactInputSingle.json'));
 
-const buildInputs = (symbol: string, unitsDelta: number, price?: number) => {
-    // For demo: always swap WETH -> USDC
-    const amountIn = Math.abs(unitsDelta) * 1e18; // 1 unit = 1 WETH
-    return {
-        protocol: 'uniswap_v3',
-        method: 'exactInputSingle',
-        contract: UNISWAP_ROUTER,
-        params: {
+    const buildInputs = (symbol: string, unitsDelta: number, price?: number) => {
+        // For demo: always swap WETH -> USDC
+        const amountIn = Math.abs(unitsDelta) * 1e18; // 1 unit = 1 WETH
+        const deadline = Math.floor(Date.now() / 1000) + 1200;
+        return {
+            protocol: 'uniswap_v3',
+            method: 'exactInputSingle',
             contract: UNISWAP_ROUTER,
+            // Executor expects params as top-level keys (tokenIn, tokenOut, fee, ...)
             tokenIn: WETH,
             tokenOut: USDC,
             fee: FEE_TIER,
             recipient,
-            deadline: Math.floor(Date.now() / 1000) + 1200,
+            deadline,
             amountIn: amountIn.toString(),
             amountOutMinimum: '0',
-            sqrtPriceLimitX96: '0'
-        },
-        chainId: 1
+            sqrtPriceLimitX96: '0',
+            chainId: 1
+        };
     };
-};
 
-const broker = new OnchainBroker({
-    rpcUrl: process.env.RPC_URL || 'http://127.0.0.1:8545',
-    privateKey: process.env.PRIVATE_KEY || '0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80',
-    schemaPath,
-    simulateOnly: false,
-    buildInputs
-});
+    const broker = new OnchainBroker({
+        rpcUrl: process.env.RPC_URL || 'http://127.0.0.1:8545',
+        privateKey: process.env.PRIVATE_KEY || '0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80',
+        schemaPath,
+        simulateOnly: true, // run example in simulation mode by default to avoid requiring approvals/balances
+        buildInputs
+    });
 
-const res = await run({
-    series: ohlc,
-    params: { symbol: 'ETH-USD', riskPct: 0.01, atrLen: 14, atrMult: 2, fast: 20, slow: 50, rsiLen: 14 },
-    broker,
-    equity: 100_000
+    // ====== Interactive simulation runner ======
+    // Allow the user to specify how many "time steps" the agent should run.
+    // Usage: npx tsx agents/trading_agent.ts [STEPS]
+    const argSteps = Number(process.argv[2] ?? process.env.RUN_STEPS ?? 50);
+    const steps = Number.isFinite(argSteps) && argSteps > 0 ? Math.floor(argSteps) : 50;
+
+    // Start near the end of the series so indicators have history; pick a start index
+    const minHistory = 60; // need some history for indicators
+    const maxStart = Math.max(0, ohlc.close.length - steps - 1);
+    const startIndex = Math.min(Math.max(minHistory, maxStart), ohlc.close.length - steps - 1);
+
+    const pb = new PaperBroker();
+    let equityNow = 100_000;
+    const initialEquity = equityNow;
+    const actions: Array<any> = [];
+
+    console.log(`[SIM] Starting simulation for ${steps} steps from index ${startIndex} (initial equity $${initialEquity})`);
+
+    for (let i = startIndex; i < startIndex + steps; i++) {
+        // Build a series slice up to current index i
+        const slice: OHLCV = {
+            open: ohlc.open.slice(0, i + 1),
+            high: ohlc.high.slice(0, i + 1),
+            low: ohlc.low.slice(0, i + 1),
+            close: ohlc.close.slice(0, i + 1),
+            volume: ohlc.volume ? ohlc.volume.slice(0, i + 1) : undefined,
+        };
+
+        // Run the agent at this time-step
+        const out = await run({
+            series: slice,
+            params: { symbol: 'ETH-USD', riskPct: 0.01, atrLen: 14, atrMult: 2, fast: 20, slow: 50, rsiLen: 14 },
+            broker: pb,
+            equity: equityNow,
+            log: (m) => console.log(`[AGENT ${i}] ${m}`)
+        });
+
+        // Record action if executed
+        if (out.executed) {
+            actions.push({ step: i, intent: out.intent });
+        }
+
+        // Mark-to-market to next close (if available)
+        const currentUnits = await pb.getPositionUnits('ETH-USD');
+        const priceNow = slice.close.at(-1)!;
+        const priceNext = ohlc.close[i + 1] ?? priceNow;
+        const pnl = currentUnits * (priceNext - priceNow);
+        equityNow = equityNow + pnl;
+
+        // Print a compact live status line
+        const positionVal = currentUnits * priceNext;
+        const unrealized = positionVal;
+        const pnlTotal = equityNow - initialEquity;
+        console.log(`[SIM ${i - startIndex + 1}/${steps}] price=${priceNext.toFixed(2)} units=${currentUnits} posVal=$${positionVal.toFixed(2)} equity=$${equityNow.toFixed(2)} pnl=$${pnlTotal.toFixed(2)} actions=${actions.length}`);
+
+        // small pause to feel like it's running when user watches (only in interactive terminals)
+        if (process.stdout.isTTY) await new Promise((r) => setTimeout(r, 100));
+    }
+
+    // Final summary
+    const finalUnits = await pb.getPositionUnits('ETH-USD');
+    const finalPrice = ohlc.close[startIndex + steps - 1];
+    const finalPositionValue = finalUnits * finalPrice;
+    const finalEquity = equityNow;
+    console.log('\n=== Simulation complete ===');
+    console.log(`Initial equity: $${initialEquity}`);
+    console.log(`Final equity:   $${finalEquity.toFixed(2)}`);
+    console.log(`Net PnL:        $${(finalEquity - initialEquity).toFixed(2)} (${(((finalEquity / initialEquity) - 1) * 100).toFixed(2)}%)`);
+    console.log(`Final position: ${finalUnits} units (~$${finalPositionValue.toFixed(2)})`);
+    console.log(`Total actions executed: ${actions.length}`);
+    console.log('Recent actions:');
+    console.log(actions.slice(-10).map((a) => ({ step: a.step, side: a.intent.side, delta: a.intent.deltaUnits, price: a.intent.price })));
+
+}
+
+main().catch(err => {
+    console.error(err);
+    process.exit(1);
 });
-console.log(res);
 
 //////////////////////////////
