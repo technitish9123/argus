@@ -18,7 +18,10 @@
     "lint": "pnpm -w run lint --silent || true",
     "clean": "pnpm -w run clean",
     "agent": "tsx -r dotenv/config",
-    "agent:run": "tsx scripts/run-agent.ts"
+  "agent:run": "tsx scripts/run-agent.ts",
+  "agent:run-rootstock-example": "node agents/agent_rootstock_example.js"
+    ,
+    "rootstock:deploy": "pnpm --filter ./rootstock-deploy... run deploy:prepare"
   },
   "devDependencies": {
     "dotenv": "^17.2.1",

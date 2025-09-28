@@ -13,6 +13,7 @@
  */
 
 import { JsonRpcProvider, Wallet, Contract, ethers, getAddress, formatUnits } from "ethers";
+import fs from "fs";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { execFromFile } from "@apdsl/agent-kit";
@@ -38,6 +39,9 @@ const IRUSDT = getAddress("0x849C47f9C259E9D62F289BF1b2729039698D8387"); // iUSD
 const LOOPS = Number(process.env.LOOPS || 1);
 const INITIAL_SUPPLY_WRBTC = BigInt(process.env.INITIAL_SUPPLY_WRBTC_WEI || 10_000_000_000_000_000n); // 0.01
 const BORROW_RUSDT_PER_LOOP = BigInt(process.env.BORROW_RUSDT_PER_LOOP || 25_000_000n); // 25 rUSDT
+
+// AgentExecutor wiring: if deploy artifact exists, use that contract for deposit/borrow/runStrategy
+const AGENT_ARTIFACT_PATH = path.join(process.cwd(), 'rootstock-deploy', 'deployed_agent_executor.json');
 
 // ABIs
 const ERC20_ABI = [
@@ -104,6 +108,18 @@ async function main() {
   const iRBTC = new Contract(IWRBTC, LOANTOKEN_ABI, signer);
   const iUSDT = new Contract(IRUSDT, LOANTOKEN_ABI, signer);
 
+  // If AgentExecutor is deployed in rootstock-deploy, wire to it
+  let agentExecutor: Contract | null = null;
+  try {
+    if (fs.existsSync(AGENT_ARTIFACT_PATH)) {
+      const art = JSON.parse(fs.readFileSync(AGENT_ARTIFACT_PATH, 'utf8'));
+      agentExecutor = new Contract(art.address, art.abi, signer);
+      log('Found AgentExecutor at', art.address, '- wiring agent to it');
+    }
+  } catch (e) {
+    log('No AgentExecutor artifact found, continuing with Sovryn flow');
+  }
+
   log(`Rootstock Sovryn leverage loop`);
   log(`WRBTC=${WRBTC}, rUSDT=${RUSDT}`);
   log(`iRBTC=${IWRBTC}, iUSDT=${IRUSDT}, AMM=${V2_ROUTER}`);
@@ -115,7 +131,14 @@ async function main() {
   }
 
   // Supply WRBTC → iRBTC (mint)
-  if (supplySchema) {
+  if (agentExecutor) {
+    // Use the simple AgentExecutor for demo deposit
+    log(`AgentExecutor deposit of ${formatUnits(INITIAL_SUPPLY_WRBTC, wrbtcDec)} ${wrbtcSym}`);
+    if (!SIMULATE) {
+      const value = INITIAL_SUPPLY_WRBTC; // this is in wei units
+      await agentExecutor.deposit({ value: value.toString() });
+    }
+  } else if (supplySchema) {
     await ensureAllowance(approveSchema, WRBTC, me, IWRBTC, INITIAL_SUPPLY_WRBTC, RPC_URL, PK, wrbtcSym, wrbtcDec, wrbtc);
     log(`supply ${formatUnits(INITIAL_SUPPLY_WRBTC, wrbtcDec)} ${wrbtcSym} via iRBTC.mint`);
     await execFromFile(supplySchema, {
@@ -132,7 +155,13 @@ async function main() {
     log(`== loop ${i + 1}/${LOOPS} ==`);
 
     // 1. Borrow rUSDT
-    if (borrowSchema) {
+    if (agentExecutor) {
+      log(`AgentExecutor borrow ${BORROW_RUSDT_PER_LOOP.toString()} (mock)`);
+      if (!SIMULATE) {
+        await agentExecutor.borrow(BORROW_RUSDT_PER_LOOP.toString());
+        await agentExecutor.runStrategy(`loop-${i + 1}`);
+      }
+    } else if (borrowSchema) {
       log(`borrow ${formatUnits(BORROW_RUSDT_PER_LOOP, rusdtDec)} ${rusdtSym} via iUSDT.borrow`);
       await execFromFile(borrowSchema, {
         contract: IRUSDT,
@@ -147,26 +176,30 @@ async function main() {
       log("borrowSchema not set — skipping borrow (demo mode)");
     }
 
-    // 2. Swap rUSDT → WRBTC
-    const rusdtBal = await rusdt.balanceOf(me);
-    if (rusdtBal > 0n) {
-      await ensureAllowance(approveSchema, RUSDT, me, V2_ROUTER, rusdtBal, RPC_URL, PK, rusdtSym, rusdtDec, rusdt);
-      const path = [RUSDT, WRBTC];
-      const amounts = await amm.getAmountsOut(rusdtBal, path);
-      const quoted = BigInt(amounts[amounts.length - 1].toString());
-      const minOut = (quoted * 99n) / 100n; // 1% slippage
-      const deadline = Math.floor(Date.now() / 1000) + 1200;
-      log(`swap ${formatUnits(rusdtBal, rusdtDec)} ${rusdtSym} -> ${wrbtcSym}`);
-      await amm.connect(signer).swapExactTokensForTokens(
-        rusdtBal,
-        minOut,
-        path,
-        me,
-        deadline,
-        { gasLimit: 1_500_000 }
-      );
+    // 2. Swap rUSDT → WRBTC (skip if we're using AgentExecutor — it's a mock flow)
+    if (!agentExecutor) {
+      const rusdtBal = await rusdt.balanceOf(me);
+      if (rusdtBal > 0n) {
+        await ensureAllowance(approveSchema, RUSDT, me, V2_ROUTER, rusdtBal, RPC_URL, PK, rusdtSym, rusdtDec, rusdt);
+        const path = [RUSDT, WRBTC];
+        const amounts = await amm.getAmountsOut(rusdtBal, path);
+        const quoted = BigInt(amounts[amounts.length - 1].toString());
+        const minOut = (quoted * 99n) / 100n; // 1% slippage
+        const deadline = Math.floor(Date.now() / 1000) + 1200;
+        log(`swap ${formatUnits(rusdtBal, rusdtDec)} ${rusdtSym} -> ${wrbtcSym}`);
+        await (amm as any).connect(signer).swapExactTokensForTokens(
+          rusdtBal,
+          minOut,
+          path,
+          me,
+          deadline,
+          { gasLimit: 1_500_000 }
+        );
+      } else {
+        log("no rUSDT to swap");
+      }
     } else {
-      log("no rUSDT to swap");
+      log('AgentExecutor in use — skipping AMM swap and resupply steps');
     }
 
     // 3. Re-supply WRBTC

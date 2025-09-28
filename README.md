@@ -49,6 +49,7 @@ DeFi today is fragmented:
 ## 📂 Project Structure
 
 ```
+
 agent-protocol-dsl/
 ├── sdk/               # Core SDK (@apdsl/agent-kit)
 ├── agents/            # Example agents
@@ -59,7 +60,8 @@ agent-protocol-dsl/
 ├── backend/           # Run Manager API
 ├── frontend/          # React playground dashboard
 └── package.json
-```
+
+````
 
 ---
 
@@ -69,7 +71,7 @@ agent-protocol-dsl/
 git clone https://github.com/technitish9123/argus
 cd argus
 pnpm install
-```
+````
 
 Run backend:
 
@@ -109,7 +111,7 @@ npx tsx agents/leverage_loop.ts
 * **TypeScript** — SDK + agents
 * **Express** — backend API
 * **React + Tailwind** — frontend dashboard
-* **EVM + Flow** — blockchain backends
+* **EVM + Flow + Rootstock** — blockchain backends
 * **SSE** — live run streaming
 
 ---
@@ -145,6 +147,20 @@ MIT © 2025 Argus contributors
 
 ✅ Qualifies for: **Freestyle Track**
 
+### 📜 Rootstock Contract Deployment
+
+* **Contract Deployed:** `AgentExecutor.sol`
+* **Deployed Address:** [`0xEb00Fa0dD4089Cc1ae7177ef57dc4e03B64f89a4`](https://explorer.testnet.rootstock.io/address/0xEb00Fa0dD4089Cc1ae7177ef57dc4e03B64f89a4)
+* **Deployer Address:** `0x08Cb58C5F9Eff674ac10aFfF7393f14fCbb53A10`
+
+#### Transactions
+
+1. **Deploy** → [0xc233aa1c65a11fc783d8a34bfb7c417f041158714e5f2968d34a92ed3aeb7d05](https://explorer.testnet.rootstock.io/tx/0xc233aa1c65a11fc783d8a34bfb7c417f041158714e5f2968d34a92ed3aeb7d05)
+2. **Deposit** (0.0001 RBTC) → [0x552a54d3f8e28f73a81269d012b21c18722b5ba90718812bc1d00060f60e736a](https://explorer.testnet.rootstock.io/tx/0x552a54d3f8e28f73a81269d012b21c18722b5ba90718812bc1d00060f60e736a)
+3. **Borrow** (mock) → [0x975f908db656a637b9b10f126a02690d88e5bdb057cebf1b21dc214f4de959e1](https://explorer.testnet.rootstock.io/tx/0x975f908db656a637b9b10f126a02690d88e5bdb057cebf1b21dc214f4de959e1)
+
+These transactions qualify our project for the **Rootstock Freestyle Track**.
+
 ---
 
 ## 💵 Argus with **PayPal USD (PYUSD)**
@@ -170,4 +186,3 @@ MIT © 2025 Argus contributors
 ---
 
 **Argus = one DSL, many blockchains, automated DeFi everywhere.**
-
