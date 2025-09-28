@@ -1,0 +1,14 @@
+{
+  "$id": "https://example.local/schemas/flow/actions/placeholder.json",
+  "title": "flow.placeholder",
+  "type": "object",
+  "x-abi": "function noop(uint256 tick)",
+  "properties": {
+    "contract": { "const": "0x0000000000000000000000000000000000000000" },
+    "params": {
+      "type": "object",
+      "properties": { "tick": { "type": "integer" } },
+      "required": ["tick"]
+    }
+  }
+}

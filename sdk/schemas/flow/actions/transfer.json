@@ -1,0 +1,17 @@
+{
+  "$id": "https://example.local/schemas/flow/actions/transfer.json",
+  "title": "flow.transfer",
+  "type": "object",
+  "x-abi": "function transfer(address to, uint256 amount)",
+  "properties": {
+    "contract": { "const": "0x0000000000000000000000000000000000000000" },
+    "params": {
+      "type": "object",
+      "properties": {
+        "to": { "type": "string", "description": "Recipient address", "pattern": "^0x[0-9a-fA-F]{40}$" },
+        "amount": { "type": "string", "description": "Amount in wei as string", "pattern": "^[0-9]+$" }
+      },
+      "required": ["to", "amount"]
+    }
+  }
+}

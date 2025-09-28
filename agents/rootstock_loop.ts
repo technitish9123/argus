@@ -24,6 +24,8 @@ const fp = (p: string) => pathToFileURL(p).href;
 const RPC_URL = process.env.RPC_URL || "http://127.0.0.1:8545";
 const PK = process.env.PRIVATE_KEY || "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
 if (!PK) throw new Error("Set PRIVATE_KEY");
+// Run only simulation (do not send transactions) when SIMULATE=true or SIMULATE=1
+const SIMULATE = (process.env.SIMULATE === "1" || String(process.env.SIMULATE).toLowerCase() === "true");
 
 // === Sovryn Rootstock mainnet defaults ===
 const WRBTC = getAddress("0x542fDA317318eBF1d3DEAf76E0b632741A7e677d");
@@ -84,7 +86,7 @@ async function ensureAllowance(
     contract: tokenAddr,
     spender,
     amount: "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
-  }, rpc, pk, false);
+  }, rpc, pk, SIMULATE);
 }
 
 async function main() {
@@ -120,7 +122,7 @@ async function main() {
       contract: IWRBTC,
       amount: INITIAL_SUPPLY_WRBTC.toString(),
       receiver: me
-    }, RPC_URL, PK, false);
+    }, RPC_URL, PK, SIMULATE);
   } else {
     log("supplySchema not set — skipping supply (demo mode)");
   }
@@ -134,12 +136,13 @@ async function main() {
       log(`borrow ${formatUnits(BORROW_RUSDT_PER_LOOP, rusdtDec)} ${rusdtSym} via iUSDT.borrow`);
       await execFromFile(borrowSchema, {
         contract: IRUSDT,
+        amount: BORROW_RUSDT_PER_LOOP.toString(),
         borrowAmount: BORROW_RUSDT_PER_LOOP.toString(),
         collateralAmount: 0,
         receiver: me,
         loanTokenSent: RUSDT,
         collateralTokenSent: WRBTC
-      }, RPC_URL, PK, false);
+      }, RPC_URL, PK, SIMULATE);
     } else {
       log("borrowSchema not set — skipping borrow (demo mode)");
     }
@@ -175,7 +178,7 @@ async function main() {
         contract: IWRBTC,
         amount: newBal.toString(),
         receiver: me
-      }, RPC_URL, PK, false);
+      }, RPC_URL, PK, SIMULATE);
     }
   }
 
