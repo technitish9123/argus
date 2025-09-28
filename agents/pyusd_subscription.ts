@@ -53,11 +53,18 @@ async function main() {
 
   let bal = BigInt(await token.balanceOf(me));
   log(`balance=${formatUnits(bal, decimals)} PYUSD | need=${TARGET_PYUSD}`);
+  try {
+    const ethBal = await provider.getBalance(me);
+    log(`ETH balance=${formatUnits(ethBal, 18)} ETH`);
+  } catch (e) {
+    // ignore
+  }
 
   if (bal < target) {
     log(`⚠️ insufficient PYUSD — swapping ${SWAP_ETH} ETH → PYUSD`);
 
-    const amountIn = parseUnits(SWAP_ETH, 18).toString();
+  const amountIn = parseUnits(SWAP_ETH, 18).toString();
+  log(`will swap ${SWAP_ETH} ETH (${amountIn} wei) for PYUSD`);
 
     const rawInputs = {
       tokenIn: ETH_SENTINEL, // 👈 no WETH
@@ -77,12 +84,15 @@ async function main() {
         ];
         const router = new Contract(UNISWAP_V3_ROUTER, routerAbi, signer);
 
+        const t0 = Date.now();
         const tx = await router.exactInputSingle(rawInputs, {
           value: amountIn, // send ETH
           gasLimit: 1_000_000
         });
-        log("swap tx:", tx.hash);
-        await tx.wait();
+        log("swap tx sent:", tx.hash);
+        const rcpt = await tx.wait();
+        const took = Date.now() - t0;
+        log(`swap mined status=${rcpt.status} gasUsed=${rcpt.gasUsed?.toString() ?? rcpt.gasUsed} took=${took}ms`);
       } else {
         log("SIMULATE=true — skip swap");
       }
@@ -90,12 +100,15 @@ async function main() {
       log("swap failed:", e?.message || String(e));
     }
 
+    const balBefore = bal;
     bal = BigInt(await token.balanceOf(me));
-    log("post-swap balance=", formatUnits(bal, decimals));
+    const delta = bal - balBefore;
+    log("post-swap balance=", formatUnits(bal, decimals), `(+${formatUnits(delta, decimals)} PYUSD)`);
   }
 
   if (bal >= target) {
     try {
+      log(`sending subscription payment ${formatUnits(target, decimals)} PYUSD (raw=${target.toString()}) to ${RECIPIENT}`);
       const res = await execFromFile(
         transferSchema,
         { contract: PYUSD, to: RECIPIENT, amount: target.toString() },
