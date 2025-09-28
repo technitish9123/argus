@@ -9,9 +9,9 @@ import AaveIcon from "../logos/aave.svg";
 import UniswapIcon from "../logos/uniswap.svg";
 import CurveIcon from "../logos/curve.svg";
 import CompoundIcon from "../logos/compound.svg";
-import RootstockIcon from "../logos/compound.svg";
-import FlowIcon from "../logos/compound.svg";
-import OneInchIcon from "../logos/compound.svg";
+import RootstockIcon from "../logos/rootstock.svg";
+import FlowIcon from "../logos/flow.svg";
+import pyUSDC from "../logos/pyusdc.svg";
 
 export default function LandingPage() {
   const protocols = [
@@ -95,7 +95,8 @@ export default function LandingPage() {
             <span className="text-xs text-gray-400">example.ts</span>
             <button
               onClick={() =>
-                navigator.clipboard.writeText(`import { Agent } from "@apdsl/agent-kit";
+                navigator.clipboard
+                  .writeText(`import { Agent } from "@apdsl/agent-kit";
 
 const agent = new Agent({
   name: "Yield Farmer",
@@ -147,7 +148,12 @@ agent.deploy();`,
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {protocols.map((p) => (
-            <Tilt key={p.name} tiltMaxAngleX={10} tiltMaxAngleY={10} scale={1.05}>
+            <Tilt
+              key={p.name}
+              tiltMaxAngleX={10}
+              tiltMaxAngleY={10}
+              scale={1.05}
+            >
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 className="p-6 rounded-xl border border-cyan-500/20 bg-white/5 backdrop-blur-md shadow-lg hover:shadow-cyan-500/30 transition"
@@ -175,7 +181,11 @@ agent.deploy();`,
         </h3>
         <div className="grid md:grid-cols-3 gap-6 mt-12">
           <div className="p-6 rounded-xl border border-white/10 bg-white/5">
-            <img src={RootstockIcon} alt="Rootstock" className="w-8 h-8 mx-auto mb-3" />
+            <img
+              src={RootstockIcon}
+              alt="Rootstock"
+              className="w-8 h-8 mx-auto mb-3"
+            />
             <h4 className="text-lg font-semibold text-cyan-400">Rootstock</h4>
             <p className="text-sm text-gray-300">
               Automating DeFi on Bitcoin — yield farming and lending for BTC
@@ -191,11 +201,11 @@ agent.deploy();`,
             </p>
           </div>
           <div className="p-6 rounded-xl border border-white/10 bg-white/5">
-            <img src={OneInchIcon} alt="1inch" className="w-8 h-8 mx-auto mb-3" />
-            <h4 className="text-lg font-semibold text-cyan-400">1inch</h4>
+            <img src={pyUSDC} alt="1inch" className="w-8 h-8 mx-auto mb-3" />
+            <h4 className="text-lg font-semibold text-cyan-400">pyUSDC</h4>
             <p className="text-sm text-gray-300">
-              Extend Limit Orders with advanced strategies like TWAP,
-              auto-hedging, and cross-chain arbitrage.
+              agent that auto-swaps token ETH → PYUSD and pays recurring
+              subscriptions/supplychain.
             </p>
           </div>
         </div>
@@ -206,10 +216,22 @@ agent.deploy();`,
         <h3 className="text-3xl font-bold text-center mb-12">How It Works</h3>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 text-center">
           {[
-            { step: "AI Agent", desc: "Learns market signals and strategy patterns." },
-            { step: "DSL Standard", desc: "Reusable, portable agent strategies across EVM & non-EVM." },
-            { step: "Protocol Execution", desc: "Agents interact with Aave, Uniswap, Rootstock, Flow." },
-            { step: "Yield Optimization", desc: "Capital deployed automatically with risk checks." },
+            {
+              step: "AI Agent",
+              desc: "Learns market signals and strategy patterns.",
+            },
+            {
+              step: "DSL Standard",
+              desc: "Reusable, portable agent strategies across EVM & non-EVM.",
+            },
+            {
+              step: "Protocol Execution",
+              desc: "Agents interact with Aave, Uniswap, Rootstock, Flow.",
+            },
+            {
+              step: "Yield Optimization",
+              desc: "Capital deployed automatically with risk checks.",
+            },
           ].map((item, idx) => (
             <motion.div
               key={idx}
@@ -232,14 +254,16 @@ agent.deploy();`,
         <h3 className="text-3xl font-bold mb-8">Our Vision</h3>
         <p className="max-w-3xl mx-auto text-gray-300 text-lg">
           Argus is building the{" "}
-          <span className="text-indigo-400 font-semibold">Agentic Standard</span> for
-          DeFi — enabling autonomous strategies, cross-chain liquidity deployment, and
-          real-time risk monitoring. <br />
+          <span className="text-indigo-400 font-semibold">
+            Agentic Standard
+          </span>{" "}
+          for DeFi — enabling autonomous strategies, cross-chain liquidity
+          deployment, and real-time risk monitoring. <br />
           For <span className="text-cyan-400">Rootstock</span>,
           <span className="text-cyan-400"> Flow</span>, and
-          <span className="text-cyan-400"> 1inch</span>, Argus is more than a project —
-          it’s the growth layer onboarding the next wave of users through{" "}
-          <span className="text-cyan-400">autonomous agents</span>.
+          <span className="text-cyan-400"> 1inch</span>, Argus is more than a
+          project — it’s the growth layer onboarding the next wave of users
+          through <span className="text-cyan-400">autonomous agents</span>.
         </p>
       </section>
     </div>
