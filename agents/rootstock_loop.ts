@@ -98,6 +98,52 @@ async function main() {
   const signer = new Wallet(PK, provider);
   const me = await signer.getAddress();
 
+  // If AgentExecutor deployed, run a simplified AgentExecutor-only flow and exit
+  try {
+    if (fs.existsSync(AGENT_ARTIFACT_PATH)) {
+      const art = JSON.parse(fs.readFileSync(AGENT_ARTIFACT_PATH, 'utf8'));
+      const agentExecutor = new Contract(art.address, art.abi, signer);
+      log('Found AgentExecutor at', art.address, '- running simplified agent loop');
+
+      for (let i = 0; i < LOOPS; i++) {
+        log(`== agent loop ${i + 1}/${LOOPS} ==`);
+        if (!SIMULATE) {
+          // deposit (use INITIAL_SUPPLY_WRBTC as wei amount)
+          try {
+            const depositTx = await agentExecutor.deposit({ value: INITIAL_SUPPLY_WRBTC.toString() });
+            log('[AgentExecutor] deposit tx', depositTx.hash);
+            await depositTx.wait();
+          } catch (e) {
+            log('[AgentExecutor] deposit error', e?.toString?.() || e);
+          }
+
+          // borrow (mock) and runStrategy
+          try {
+            const borrowTx = await agentExecutor.borrow(BORROW_RUSDT_PER_LOOP.toString());
+            log('[AgentExecutor] borrow tx', borrowTx.hash);
+            await borrowTx.wait();
+          } catch (e) {
+            log('[AgentExecutor] borrow error', e?.toString?.() || e);
+          }
+
+          try {
+            const stratTx = await agentExecutor.runStrategy(`loop-${i + 1}`);
+            log('[AgentExecutor] runStrategy tx', stratTx.hash);
+            await stratTx.wait();
+          } catch (e) {
+            log('[AgentExecutor] runStrategy error', e?.toString?.() || e);
+          }
+        } else {
+          log('[AgentExecutor] SIMULATE mode - not sending txs');
+        }
+      }
+      log('AgentExecutor loop complete');
+      return;
+    }
+  } catch (e) {
+    log('Could not run AgentExecutor simplified flow, falling back to full flow', e?.toString?.() || e);
+  }
+
   const wrbtc = new Contract(WRBTC, ERC20_ABI, provider);
   const rusdt = new Contract(RUSDT, ERC20_ABI, provider);
   const [wrbtcDec, rusdtDec, wrbtcSym, rusdtSym] = await Promise.all([
