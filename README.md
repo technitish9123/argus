@@ -66,7 +66,7 @@ agent-protocol-dsl/
 ## 🏗️ Getting Started
 
 ```bash
-git clone https://github.com/your-org/argus
+git clone https://github.com/technitish9123/argus
 cd argus
 pnpm install
 ```
